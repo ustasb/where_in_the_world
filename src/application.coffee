@@ -1,4 +1,5 @@
 class WorldMapView
+  SELECTED_REGION_COLOR = '#2ECC71'
   BACKGROUND_COLOR = '#2980B9'
 
   constructor: (container_id) ->
@@ -7,11 +8,17 @@ class WorldMapView
   createMap: ->
     @el.vectorMap
       map: 'world_mill_en'
-      hoverColor: '3498DB'
       backgroundColor: BACKGROUND_COLOR
+      regionStyle:
+        selected:
+          fill: SELECTED_REGION_COLOR
+      onRegionClick: (e, regionCode) =>
+        @map.setSelectedRegions(regionCode)
+
+    @map = @el.vectorMap('get', 'mapObject')
+
 
 class LightBox
-
   constructor: (container_id) ->
     @el = $('#' + container_id)
 

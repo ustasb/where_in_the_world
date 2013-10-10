@@ -3,7 +3,9 @@
   var LightBox, WorldMapView;
 
   WorldMapView = (function() {
-    var BACKGROUND_COLOR;
+    var BACKGROUND_COLOR, SELECTED_REGION_COLOR;
+
+    SELECTED_REGION_COLOR = '#2ECC71';
 
     BACKGROUND_COLOR = '#2980B9';
 
@@ -12,11 +14,20 @@
     }
 
     WorldMapView.prototype.createMap = function() {
-      return this.el.vectorMap({
+      var _this = this;
+      this.el.vectorMap({
         map: 'world_mill_en',
-        hoverColor: '3498DB',
-        backgroundColor: BACKGROUND_COLOR
+        backgroundColor: BACKGROUND_COLOR,
+        regionStyle: {
+          selected: {
+            fill: SELECTED_REGION_COLOR
+          }
+        },
+        onRegionClick: function(e, regionCode) {
+          return _this.map.setSelectedRegions(regionCode);
+        }
       });
+      return this.map = this.el.vectorMap('get', 'mapObject');
     };
 
     return WorldMapView;
