@@ -1,6 +1,6 @@
-class WorldMapView
-  SELECTED_REGION_COLOR = '#2ECC71'
+class WorldMap
   BACKGROUND_COLOR = '#2980B9'
+  SELECTED_REGION_COLOR = '#2ECC71'
 
   constructor: (container_id) ->
     @el = $('#' + container_id)
@@ -17,38 +17,52 @@ class WorldMapView
 
     @map = @el.vectorMap('get', 'mapObject')
 
+class Quiz
 
 class LightBox
+  backdrop = $('<div class="light-box-bg"></div>')
+
+  @showBackdrop: do ->
+    added = false
+    ->
+      if added
+        backdrop.show()
+      else
+        $(document.body).append(backdrop)
+        added = true
+
+  @hideBackdrop: ->
+    backdrop.hide()
+
   constructor: (container_id) ->
     @el = $('#' + container_id)
 
-    @resize()
-    @initEvents()
+    @centerInWindow()
+    @show()
+    @bindEvents()
 
-  initEvents: ->
-    $(window).resize => @resize()
+  bindEvents: ->
+    $(window).resize => @centerInWindow()
 
-  resize: ->
+  centerInWindow: ->
     $window = $(window)
 
     @el.css
       left: ($window.width() - @el.width()) / 2
       top: ($window.height() - @el.height()) / 2
 
-  hide: -> @el.hide()
-  show: -> @el.show()
+  hide: ->
+    LightBox.hideBackdrop()
+    @el.hide()
+
+  show: ->
+    LightBox.showBackdrop()
+    @el.show()
 
 $(document).ready ->
-  world = new WorldMapView('world-map')
+
+
+  world = new WorldMap('world-map')
   world.createMap()
 
-  #lightbox = new LightBox('lightBox')
-  #lightbox.
-
-
-
-
-
-
-
-
+  lightBox = new LightBox('menu')
