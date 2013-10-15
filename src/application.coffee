@@ -1,13 +1,22 @@
-class WorldMap
+class Map
   BACKGROUND_COLOR = '#2980B9'
   SELECTED_REGION_COLOR = '#2ECC71'
 
-  constructor: (container_id) ->
+  constructor: (container_id, mapName) ->
     @el = $('#' + container_id)
+    @mapName = mapName
+
+  draw: ->
+    @loadMap => @createMap()
+
+  loadMap: (callback) ->
+    $.get "vendor/jvectormap/maps/#{@mapName}.js", (data) ->
+      eval(data)
+      callback()
 
   createMap: ->
     @el.vectorMap
-      map: 'world_mill_en'
+      map: @mapName,
       backgroundColor: BACKGROUND_COLOR
       regionStyle:
         selected:
@@ -16,8 +25,6 @@ class WorldMap
         @map.setSelectedRegions(regionCode)
 
     @map = @el.vectorMap('get', 'mapObject')
-
-class Quiz
 
 class LightBox
   backdrop = $('<div class="light-box-bg"></div>')
@@ -60,9 +67,8 @@ class LightBox
     @el.show()
 
 $(document).ready ->
-
-
-  world = new WorldMap('world-map')
-  world.createMap()
+  world = new Map('world-map', 'world_mill_en')
+  world.draw()
 
   lightBox = new LightBox('menu')
+  lightBox.hide()
