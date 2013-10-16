@@ -8,7 +8,7 @@ body {
   background-color: #2980B9;
 }
 
-#world-map {
+#map-container {
   padding: 10px;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
