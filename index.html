@@ -8,13 +8,12 @@
   <link type="text/css" rel="stylesheet" href="css/application.css" />
 </head>
 <body>
+
   <div id="map-container"></div>
 
-  <div id="question-box">
-    <h3>Where is Norway?</h3>
-    <input class="answer" type="text" /><br>
+  <div id="quiz-box">
+    <h3><!-- some question --></h3>
     <button class="skip-question">Skip</button>
-    <button class="submit-answer">Submit</button>
   </div>
 
   <div id="menu" class="light-box container">
@@ -36,5 +35,9 @@
   <script src="vendor/jquery/jquery-1.10.2.min.js"></script>
   <script src="vendor/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
   <script src="src/application.js"></script>
+  <script>
+    $(document).ready(function() { new App(); });
+  </script>
+
 </body>
 </html>

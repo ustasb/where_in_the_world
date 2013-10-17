@@ -24,7 +24,7 @@ body {
   border-radius: 7px;
 }
 
-#question-box {
+#quiz-box {
   position: absolute;
   z-index: 3;
   top: 10px;
