@@ -1,6 +1,5 @@
 class Map
   BACKGROUND_COLOR = '#2980B9'
-  SELECTED_REGION_COLOR = '#2ECC71'
 
   @loadMap: do ->
     loaded = {}
@@ -14,29 +13,41 @@ class Map
           loaded[mapName] = true
           callback()
 
-  constructor: (container_id, mapName) ->
-    @el = $('#' + container_id)
+  constructor: (containerID, mapName) ->
+    @el = $('#' + containerID)
     @mapName = mapName
 
   render: ->
     Map.loadMap @mapName, => @_createMap()
 
-  selectRegion: (regionCode) ->
+  isRegionSelected: (regionCode) ->
+    selected = @map.getSelectedRegions()
+    $.inArray(regionCode, selected) isnt -1
+
+  selectRegion: (regionCode, color) ->
+    @map.regions[regionCode].element.style.selected.fill = color
     @map.setSelectedRegions(regionCode)
+
+  codeForRegion: (regionName) ->
+    for regionCode, data of @map.regions
+      return regionCode if data.config.name == regionName
+
+  regionForCode: (regionCode) ->
+    @map.getRegionName(regionCode)
+
+  getRegions: ->
+    (data.config.name for regionCode, data of @map.regions)
 
   bindEvents: (events) ->
     for event, callback of events
       @el.bind("#{event}.jvectormap", callback)
 
-  _createMap: (opts) ->
+  _createMap: ->
     @el.empty()
 
     @el.vectorMap
       map: @mapName,
       backgroundColor: BACKGROUND_COLOR
-      regionStyle:
-        selected:
-          fill: SELECTED_REGION_COLOR
 
     @map = @el.vectorMap('get', 'mapObject')
 
@@ -55,8 +66,8 @@ class LightBox
   @hideBackdrop: ->
     backdrop.hide()
 
-  constructor: (container_id) ->
-    @el = $('#' + container_id)
+  constructor: (containerID) ->
+    @el = $('#' + containerID)
 
     @_centerInWindow()
     @show()
@@ -71,7 +82,7 @@ class LightBox
     @el.show()
 
   _bindEvents: ->
-    $(window).resize => @centerInWindow()
+    $(window).resize => @_centerInWindow()
 
   _centerInWindow: ->
     $window = $(window)
@@ -101,38 +112,105 @@ class Menu
     @lightbox = new LightBox('menu')
 
   _bindEvents: ->
-    $('#start-quiz').click(@onStartQuiz)
+    $('#start-quiz').click( $.proxy(@onStartQuiz, @) )
 
     $('#map-type').change =>
       @onSelectMap( @getSelectedMap() )
 
-class LocationQuiz
-  constructor: (map) ->
-    @map = map
+class QuestionBox
+  instance = null
+
+  constructor: (opts) ->
+    return instance if instance?
+
+    @el = $('#' + opts.containerID)
+
+    @onSkipQuestion = opts.onSkipQuestion
+    @onSubmitAnswer = opts.onSubmitAnswer
+
     @_bindEvents()
 
-  _bindEvents: ->
-    @map.bindEvents
-      regionClick: $.proxy @_onRegionClick, @
+    instance = @
 
-  _onRegionClick: (e, regionCode) ->
-    @map.selectRegion(regionCode)
+  prompt: (question, showInput = false) ->
+    @el.children('h3').text(question)
+
+    input = @el.children('.answer')
+    if showInput then input.show() else input.hide()
+
+  _bindEvents: ->
+    @el.children('.skip-question').click( @onSkipQuestion )
+    @el.children('.submit-answer').click( @onSubmitAnswer )
+
+class LocationQuiz
+  constructor: (regions) ->
+    @regions = regions
+    @regionsCount = regions.length
+    @currentRegion = null
+    @numCorrect = 0
+
+  newQuestion: ->
+    if @regions.length is 0
+      null
+    else
+      randomIndex = Math.floor (Math.random() * @regions.length)
+      @currentRegion = @regions[ randomIndex ]
+      "Where is #{@currentRegion}?"
+
+  answerQuestion: (answer) ->
+    index = $.inArray(@currentRegion, @regions)
+    @regions.splice(index, 1)
+
+    correct = answer is @currentRegion
+    @numCorrect += 1 if correct
+    correct
+
+  status: ->
+    questionsLeft: @regions.length
+    questionCount: @regionsCount
+    numCorrect: @numCorrect
 
 class App
   MAP_CONTAINER_ID = 'map-container'
 
+  CORRECT_REGION_COLOR = '#2ECC71'
+  INCORRECT_REGION_COLOR = '#E74C3C'
+
   constructor: ->
-    menu = new Menu(
-      onSelectMap: @renderMap
-      onStartQuiz: =>
-        menu.hide()
-        new LocationQuiz(@map)
-    )
+    @menu = new Menu
+      onSelectMap: $.proxy(@_renderMap, @)
+      onStartQuiz: $.proxy(@_startQuiz, @)
 
-    @renderMap( menu.getSelectedMap() )
+    @_renderMap( @menu.getSelectedMap() )
 
-  renderMap: (mapName) ->
+  _renderMap: (mapName) ->
     @map = new Map(MAP_CONTAINER_ID, mapName)
     @map.render()
+
+  _startQuiz: (quizType) ->
+    @menu.hide()
+
+    quiz = new LocationQuiz( @map.getRegions() )
+
+    questionBox = new QuestionBox
+      containerID: 'question-box'
+      onSkipQuestion: ->
+        questionBox.prompt( quiz.newQuestion() )
+
+    @map.bindEvents
+      regionLabelShow: (e, label, code) =>
+        false unless @map.isRegionSelected(code)
+
+      regionClick: (e, regionCode) =>
+        region = @map.regionForCode(regionCode)
+
+        if quiz.answerQuestion(region)
+          @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
+        else
+          @map.selectRegion( @map.codeForRegion(quiz.currentRegion) , INCORRECT_REGION_COLOR)
+
+        questionBox.prompt( quiz.newQuestion() )
+
+    questionBox.prompt( quiz.newQuestion() )
 
 $(document).ready -> new App
