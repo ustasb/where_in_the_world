@@ -44,33 +44,32 @@
       };
       return this.map.bindEvents({
         regionLabelShow: function(e, label, code) {
-          if (!_this.map.isRegionSelected(code)) {
-            return false;
-          }
+          return _this.map.isRegionSelected(code);
         },
         regionClick: function(e, regionCode) {
-          var askedRegion, nextQuestion, region;
-          region = _this.map.regionForCode(regionCode);
-          if (quiz.answerQuestion(region)) {
+          var askedRegion, clickedRegion, nextQuestion, status;
+          clickedRegion = _this.map.regionForCode(regionCode);
+          askedRegion = quiz.currentRegion;
+          if (quiz.answerQuestion(clickedRegion)) {
             _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
           } else {
-            askedRegion = _this.map.codeForRegion(quiz.currentRegion);
-            _this.map.selectRegion(askedRegion, INCORRECT_REGION_COLOR);
+            _this.map.selectRegion(_this.map.codeForRegion(askedRegion), INCORRECT_REGION_COLOR);
           }
           nextQuestion = quiz.getQuestion();
           if (nextQuestion != null) {
             return QuizBox.askQuestion(nextQuestion);
           } else {
-            return _this._endQuiz(quiz.status());
+            status = quiz.status();
+            return _this._endQuiz(status.numCorrect, status.questionCount);
           }
         }
       });
     };
 
-    App.prototype._endQuiz = function(quizStatus) {
+    App.prototype._endQuiz = function(numCorrect, questionCount) {
       QuizBox.hide();
       this.menu.show();
-      return this.menu.showScore(quizStatus.numCorrect);
+      return this.menu.showScore(numCorrect);
     };
 
     return App;
@@ -138,7 +137,7 @@
 
   LocationQuiz = (function() {
     function LocationQuiz(regions) {
-      this.regions = [regions[0]];
+      this.regions = regions;
       this.regionsCount = regions.length;
       this.currentRegion = null;
       this.numCorrect = 0;
@@ -163,6 +162,7 @@
       if (correct) {
         this.numCorrect += 1;
       }
+      this.currentRegion = null;
       return correct;
     };
 
@@ -254,6 +254,7 @@
 
     Map.prototype.bindEvents = function(events) {
       var callback, event, _results;
+      this.el.unbind();
       _results = [];
       for (event in events) {
         callback = events[event];

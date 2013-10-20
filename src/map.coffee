@@ -42,6 +42,8 @@ class Map
     (data.config.name for regionCode, data of @map.regions)
 
   bindEvents: (events) ->
+    @el.unbind()  # Remove any existing events
+
     for event, callback of events
       @el.bind("#{event}.jvectormap", callback)
 

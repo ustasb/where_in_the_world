@@ -32,24 +32,25 @@ class window.App
 
     @map.bindEvents
       regionLabelShow: (e, label, code) =>
-        false unless @map.isRegionSelected(code)
+        @map.isRegionSelected(code)
 
       regionClick: (e, regionCode) =>
-        region = @map.regionForCode(regionCode)
+        clickedRegion = @map.regionForCode(regionCode)
+        askedRegion = quiz.currentRegion
 
-        if quiz.answerQuestion(region)
+        if quiz.answerQuestion(clickedRegion)
           @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
         else
-          askedRegion = @map.codeForRegion(quiz.currentRegion)
-          @map.selectRegion(askedRegion , INCORRECT_REGION_COLOR)
+          @map.selectRegion(@map.codeForRegion(askedRegion), INCORRECT_REGION_COLOR)
 
         nextQuestion = quiz.getQuestion()
         if nextQuestion?
           QuizBox.askQuestion(nextQuestion)
         else
-          @_endQuiz( quiz.status() )
+          status = quiz.status()
+          @_endQuiz(status.numCorrect, status.questionCount)
 
-  _endQuiz: (quizStatus) ->
+  _endQuiz: (numCorrect, questionCount) ->
     QuizBox.hide()
     @menu.show()
-    @menu.showScore(quizStatus.numCorrect)
+    @menu.showScore(numCorrect)
