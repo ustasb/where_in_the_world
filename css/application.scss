@@ -1,33 +1,49 @@
+$blue: #2980B9;
+
 html, body {
   height: 100%;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 body {
   position: relative;
-  background-color: #2980b9; }
+  background-color: $blue;
+}
 
-.container, #quiz-box {
-  -moz-border-radius: 7px;
-  -webkit-border-radius: 7px;
-  -khtml-border-radius: 7px;
-  border-radius: 7px; }
-
-#map-container {
+@mixin border-box {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+@mixin border-radius($radius) {
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -khtml-border-radius: $radius;
+  border-radius: $radius;
+}
+
+.container {
+  @include border-radius(7px);
+}
+
+#map-container {
+  @include border-box;
   padding: 10px;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
 #quiz-box {
+  @extend .container;
   position: absolute;
   z-index: 3;
   top: 10px;
   right: 10px;
   width: 300px;
   padding: 10px;
-  background-color: white; }
+  background-color: white;
+}
 
 .light-box {
   position: absolute;
@@ -35,7 +51,8 @@ body {
   padding: 10px;
   width: 500px;
   height: 300px;
-  background-color: white; }
+  background-color: white;
+}
 
 .light-box-bg {
   position: absolute;
@@ -45,4 +62,5 @@ body {
   width: 100%;
   height: 100%;
   background-color: black;
-  opacity: 0.5; }
+  opacity: 0.5;
+}

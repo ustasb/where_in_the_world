@@ -19,18 +19,16 @@ class window.App
 
   _startQuiz: ->
     @menu.hide()
+    @menu.hideScore()
+    @map.clearSelectedRegions()
 
     @_startLocationQuiz()
-
     QuizBox.show()
 
   _startLocationQuiz: ->
     quiz = new LocationQuiz( @map.getRegions() )
-
     QuizBox.askQuestion( quiz.getQuestion() )
-
-    QuizBox.onSkipQuestion = ->
-      QuizBox.askQuestion( quiz.getQuestion() )
+    QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
 
     @map.bindEvents
       regionLabelShow: (e, label, code) =>
@@ -43,6 +41,15 @@ class window.App
           @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
         else
           askedRegion = @map.codeForRegion(quiz.currentRegion)
-          @map.selectRegion( askedRegion , INCORRECT_REGION_COLOR)
+          @map.selectRegion(askedRegion , INCORRECT_REGION_COLOR)
 
-        QuizBox.askQuestion( quiz.getQuestion() )
+        nextQuestion = quiz.getQuestion()
+        if nextQuestion?
+          QuizBox.askQuestion(nextQuestion)
+        else
+          @_endQuiz( quiz.status() )
+
+  _endQuiz: (quizStatus) ->
+    QuizBox.hide()
+    @menu.show()
+    @menu.showScore(quizStatus.numCorrect)

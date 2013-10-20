@@ -20,6 +20,9 @@ class Map
   render: ->
     Map.loadMap @mapName, => @_createMap()
 
+  clearSelectedRegions: ->
+    @map.clearSelectedRegions()
+
   isRegionSelected: (regionCode) ->
     selected = @map.getSelectedRegions()
     $.inArray(regionCode, selected) isnt -1

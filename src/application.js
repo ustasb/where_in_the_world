@@ -28,6 +28,8 @@
 
     App.prototype._startQuiz = function() {
       this.menu.hide();
+      this.menu.hideScore();
+      this.map.clearSelectedRegions();
       this._startLocationQuiz();
       return QuizBox.show();
     };
@@ -47,7 +49,7 @@
           }
         },
         regionClick: function(e, regionCode) {
-          var askedRegion, region;
+          var askedRegion, nextQuestion, region;
           region = _this.map.regionForCode(regionCode);
           if (quiz.answerQuestion(region)) {
             _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
@@ -55,9 +57,20 @@
             askedRegion = _this.map.codeForRegion(quiz.currentRegion);
             _this.map.selectRegion(askedRegion, INCORRECT_REGION_COLOR);
           }
-          return QuizBox.askQuestion(quiz.getQuestion());
+          nextQuestion = quiz.getQuestion();
+          if (nextQuestion != null) {
+            return QuizBox.askQuestion(nextQuestion);
+          } else {
+            return _this._endQuiz(quiz.status());
+          }
         }
       });
+    };
+
+    App.prototype._endQuiz = function(quizStatus) {
+      QuizBox.hide();
+      this.menu.show();
+      return this.menu.showScore(quizStatus.numCorrect);
     };
 
     return App;
@@ -125,7 +138,7 @@
 
   LocationQuiz = (function() {
     function LocationQuiz(regions) {
-      this.regions = regions;
+      this.regions = [regions[0]];
       this.regionsCount = regions.length;
       this.currentRegion = null;
       this.numCorrect = 0;
@@ -198,6 +211,10 @@
       });
     };
 
+    Map.prototype.clearSelectedRegions = function() {
+      return this.map.clearSelectedRegions();
+    };
+
     Map.prototype.isRegionSelected = function(regionCode) {
       var selected;
       selected = this.map.getSelectedRegions();
@@ -263,6 +280,7 @@
       this.onSelectMap = opts.onSelectMap;
       this.onStartQuiz = opts.onStartQuiz;
       this._createMenu();
+      this.hideScore();
       this._bindEvents();
     }
 
@@ -276,6 +294,14 @@
 
     Menu.prototype.getSelectedMap = function() {
       return $('#map-type').find(':selected').val();
+    };
+
+    Menu.prototype.showScore = function(numCorrect) {
+      return $('#score').show().children('span').text(numCorrect);
+    };
+
+    Menu.prototype.hideScore = function(numCorrect) {
+      return $('#score').hide();
     };
 
     Menu.prototype._createMenu = function() {

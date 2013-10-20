@@ -1,6 +1,6 @@
 class LocationQuiz
   constructor: (regions) ->
-    @regions = regions
+    @regions = [regions[0]]
     @regionsCount = regions.length
     @currentRegion = null
     @numCorrect = 0
