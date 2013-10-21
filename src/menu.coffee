@@ -14,7 +14,7 @@ class Menu
     @lightbox.hide()
 
   getSelectedMap: ->
-    $('#map-type').find(':selected').val()
+    $('#map-type .pure-button-active').first().data('map')
 
   showScore: (numCorrect) ->
     $('#score').show().children('span').text(numCorrect)
@@ -28,6 +28,9 @@ class Menu
   _bindEvents: ->
     $('#start-quiz').click( $.proxy(@onStartQuiz, @) )
 
-    $('#map-type').change =>
-      @onSelectMap( @getSelectedMap() )
-
+    $('#map-type .pure-button').click do =>
+      $active = $('#map-type .pure-button-active')
+      (e) =>
+        $active.removeClass('pure-button-active')
+        $active = $(e.target).addClass('pure-button-active')
+        @onSelectMap( @getSelectedMap() )

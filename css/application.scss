@@ -1,4 +1,6 @@
+$white: #FFFFFF;
 $blue: #2980B9;
+$dark-blue: #2C3E50;
 
 html, body {
   height: 100%;
@@ -8,6 +10,15 @@ html, body {
 body {
   position: relative;
   background-color: $blue;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: $dark-blue;
+}
+
+h1 {
+  font-size: 2.6em;
+  font-weight: 100;
 }
 
 @mixin border-box {
@@ -23,8 +34,13 @@ body {
   border-radius: $radius;
 }
 
+.pure-button-primary {
+  font-weight: 100;
+}
+
 .container {
-  @include border-radius(7px);
+  @include border-radius(5px);
+  background-color: $white;
 }
 
 #map-container {
@@ -34,24 +50,55 @@ body {
   height: 100%;
 }
 
-#quiz-box {
+#menu, #quiz-box {
   @extend .container;
+}
+
+#menu {
+  width: 550px;
+  padding: 10px 20px 20px 20px;
+  overflow: hidden;
+
+  form {
+    margin-left: -100px;
+
+    #start-quiz {
+      margin-left: 2px;
+    }
+  }
+
+  #globe {
+    position: absolute;
+    bottom: -65px;
+    right: -55px;
+    color: $blue;
+    font-size: 260px;
+    opacity: 0.4;
+  }
+}
+
+#quiz-box {
   position: absolute;
   z-index: 3;
   top: 10px;
   right: 10px;
   width: 300px;
   padding: 10px;
-  background-color: white;
+  border: 2px solid $blue;
+
+  .icon-reorder {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 22px;
+    color: $blue;
+    cursor: pointer;
+  }
 }
 
 .light-box {
   position: absolute;
   z-index: 3;
-  padding: 10px;
-  width: 500px;
-  height: 300px;
-  background-color: white;
 }
 
 .light-box-bg {
@@ -61,6 +108,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
-  opacity: 0.5;
+  background-color: $dark-blue;
+  opacity: 0.6;
 }

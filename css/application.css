@@ -4,13 +4,25 @@ html, body {
 
 body {
   position: relative;
-  background-color: #2980b9; }
+  background-color: #2980b9;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #2c3e50; }
 
-.container, #quiz-box {
-  -moz-border-radius: 7px;
-  -webkit-border-radius: 7px;
-  -khtml-border-radius: 7px;
-  border-radius: 7px; }
+h1 {
+  font-size: 2.6em;
+  font-weight: 100; }
+
+.pure-button-primary {
+  font-weight: 100; }
+
+.container, #menu, #quiz-box {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  background-color: white; }
 
 #map-container {
   -webkit-box-sizing: border-box;
@@ -20,6 +32,22 @@ body {
   width: 100%;
   height: 100%; }
 
+#menu {
+  width: 550px;
+  padding: 10px 20px 20px 20px;
+  overflow: hidden; }
+  #menu form {
+    margin-left: -100px; }
+    #menu form #start-quiz {
+      margin-left: 2px; }
+  #menu #globe {
+    position: absolute;
+    bottom: -65px;
+    right: -55px;
+    color: #2980b9;
+    font-size: 260px;
+    opacity: 0.4; }
+
 #quiz-box {
   position: absolute;
   z-index: 3;
@@ -27,15 +55,18 @@ body {
   right: 10px;
   width: 300px;
   padding: 10px;
-  background-color: white; }
+  border: 2px solid #2980b9; }
+  #quiz-box .icon-reorder {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 22px;
+    color: #2980b9;
+    cursor: pointer; }
 
 .light-box {
   position: absolute;
-  z-index: 3;
-  padding: 10px;
-  width: 500px;
-  height: 300px;
-  background-color: white; }
+  z-index: 3; }
 
 .light-box-bg {
   position: absolute;
@@ -44,5 +75,5 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
-  opacity: 0.5; }
+  background-color: #2c3e50;
+  opacity: 0.6; }

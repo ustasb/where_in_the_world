@@ -3,6 +3,7 @@ QuizBox = do ->
 
   init: ->
     $el.children('.skip-question').click -> QuizBox.onSkipQuestion()
+    #$el.clildren('.menu').click ->
 
   askQuestion: (question) ->
     $el.children('h3').text(question)

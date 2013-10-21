@@ -3,7 +3,9 @@
 <head>
   <title>Where in the World?</title>
   <meta charset="utf-8">
-  <link type="text/css" rel="stylesheet" href="vendor/normalize/normalize.css" />
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Roboto:100,300' rel='stylesheet' type='text/css'>
+  <link type="text/css" rel="stylesheet" href="vendor/pure/pure-min.css" />
   <link type="text/css" rel="stylesheet" href="vendor/jvectormap/jquery-jvectormap-1.2.2.css" />
   <link type="text/css" rel="stylesheet" href="css/application.css" />
 </head>
@@ -13,21 +15,29 @@
 
   <div id="quiz-box">
     <h3><!-- some question --></h3>
-    <button class="skip-question">Skip</button>
+    <a class="skip-question pure-button pure-button-primary">Skip</a>
+    <i class="icon-reorder" title="Menu"></i>
   </div>
 
-  <div id="menu" class="light-box container">
+  <div id="menu" class="light-box">
     <h1>Where in the World...</h1>
     <div id="score">
-      You got <span></span> correct.
+      <!--You got <span></span> correct.-->
     </div>
-    <h2>Map:</h2>
-    <select id="map-type">
-      <option value="world_mill_en">World</option>
-      <option value="europe_mill_en">Europe</option>
-      <option value="us_mill_en" selected>US</option>
-    </select>
-    <button id="start-quiz">Start</button>
+    <form class="pure-form pure-form-aligned" action="#">
+      <fieldset>
+        <div id="map-type" class="pure-control-group">
+          <label>Map</label>
+          <a class="pure-button pure-button-active" data-map="world_mill_en">World</a>
+          <a class="pure-button" data-map="us_mill_en">USA</a>
+          <a class="pure-button" data-map="europe_mill_en">Europe</a>
+        </div>
+        <div class="pure-controls">
+          <a id="start-quiz" class="pure-button pure-button-primary">Start</a>
+        </div>
+      </fieldset>
+    </form>
+    <i id="globe" class="icon-globe"></i>
   </div>
 
   <script src="vendor/jquery/jquery-1.10.2.min.js"></script>

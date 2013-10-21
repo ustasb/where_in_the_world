@@ -123,11 +123,12 @@
     };
 
     LightBox.prototype._centerInWindow = function() {
-      var $window;
+      var $window, verticalOffset;
       $window = $(window);
+      verticalOffset = 50;
       return this.el.css({
         left: ($window.width() - this.el.width()) / 2,
-        top: ($window.height() - this.el.height()) / 2
+        top: (($window.height() - this.el.height()) / 2) - verticalOffset
       });
     };
 
@@ -294,7 +295,7 @@
     };
 
     Menu.prototype.getSelectedMap = function() {
-      return $('#map-type').find(':selected').val();
+      return $('#map-type .pure-button-active').first().data('map');
     };
 
     Menu.prototype.showScore = function(numCorrect) {
@@ -312,9 +313,15 @@
     Menu.prototype._bindEvents = function() {
       var _this = this;
       $('#start-quiz').click($.proxy(this.onStartQuiz, this));
-      return $('#map-type').change(function() {
-        return _this.onSelectMap(_this.getSelectedMap());
-      });
+      return $('#map-type .pure-button').click((function() {
+        var $active;
+        $active = $('#map-type .pure-button-active');
+        return function(e) {
+          $active.removeClass('pure-button-active');
+          $active = $(e.target).addClass('pure-button-active');
+          return _this.onSelectMap(_this.getSelectedMap());
+        };
+      })());
     };
 
     return Menu;
