@@ -22,6 +22,9 @@ class LocationQuiz
     @currentRegion = null
     correct
 
+  percentComplete: ->
+    (1 - @regions.length / @regionsCount) * 100
+
   status: ->
     questionsLeft: @regions.length
     questionCount: @regionsCount

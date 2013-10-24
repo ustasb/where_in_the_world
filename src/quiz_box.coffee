@@ -3,7 +3,7 @@ QuizBox = do ->
 
   init: ->
     $el.children('.skip-question').click -> QuizBox.onSkipQuestion()
-    #$el.clildren('.menu').click ->
+    $el.children('.main-menu').click -> QuizBox.onMenuClick()
 
   askQuestion: (question) ->
     $el.children('h3').text(question)
@@ -11,5 +11,7 @@ QuizBox = do ->
   show: -> $el.show()
 
   hide: -> $el.hide()
+
+  onMenuClick: -> throw new Error('Must be overwritten!')
 
   onSkipQuestion: -> throw new Error('Must be overwritten!')

@@ -15,9 +15,11 @@ end
 
 desc 'Run all the tasks'
 task :all do
-  Thread.new { Rake::Task['coffee_watch'].invoke }
-  Thread.new { Rake::Task['sass_watch'].invoke }
-  Thread.new { Rake::Task['server'].invoke }
+  threads = []
+  threads << Thread.new { Rake::Task['coffee_watch'].invoke }
+  threads << Thread.new { Rake::Task['sass_watch'].invoke }
+  threads << Thread.new { Rake::Task['server'].invoke }
+  threads.each(&:join)
 end
 
 task :default => [:all]

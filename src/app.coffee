@@ -4,8 +4,13 @@ class window.App
   INCORRECT_REGION_COLOR = '#E74C3C'
 
   constructor: ->
+    ProgressBar.hide()
+
     QuizBox.init()
     QuizBox.hide()
+    QuizBox.onMenuClick = =>
+      @_endQuiz()
+      @_renderMap( @menu.getSelectedMap() )
 
     @menu = new Menu
       onSelectMap: $.proxy(@_renderMap, @)
@@ -24,6 +29,7 @@ class window.App
 
     @_startLocationQuiz()
     QuizBox.show()
+    ProgressBar.show()
 
   _startLocationQuiz: ->
     quiz = new LocationQuiz( @map.getRegions() )
@@ -43,14 +49,17 @@ class window.App
         else
           @map.selectRegion(@map.codeForRegion(askedRegion), INCORRECT_REGION_COLOR)
 
-        nextQuestion = quiz.getQuestion()
-        if nextQuestion?
+        ProgressBar.update( quiz.percentComplete() )
+
+        if nextQuestion = quiz.getQuestion()
           QuizBox.askQuestion(nextQuestion)
         else
-          status = quiz.status()
-          @_endQuiz(status.numCorrect, status.questionCount)
+          @_endQuiz()
 
-  _endQuiz: (numCorrect, questionCount) ->
+  _endQuiz: ->
     QuizBox.hide()
+
+    ProgressBar.reset()
+    ProgressBar.hide()
+
     @menu.show()
-    @menu.showScore(numCorrect)
