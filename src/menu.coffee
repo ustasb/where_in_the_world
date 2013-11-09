@@ -30,7 +30,11 @@ class Menu
 
     $('#map-type .pure-button').click do =>
       $active = $('#map-type .pure-button-active')
+
       (e) =>
-        $active.removeClass('pure-button-active')
-        $active = $(e.target).addClass('pure-button-active')
-        @onSelectMap( @getSelectedMap() )
+        $target = $(e.target)
+
+        unless $target.hasClass('pure-button-active')
+          $active.removeClass('pure-button-active')
+          $active = $(e.target).addClass('pure-button-active')
+          @onSelectMap( @getSelectedMap() )
