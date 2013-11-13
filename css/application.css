@@ -86,3 +86,11 @@ h1 {
   height: 100%;
   background-color: #2c3e50;
   opacity: 0.6; }
+
+.plane {
+  position: absolute;
+  pointer-events: none;
+  margin-top: -10px;
+  margin-left: -10px;
+  width: 20px;
+  height: 20px; }

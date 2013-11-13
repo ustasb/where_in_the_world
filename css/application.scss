@@ -6,6 +6,8 @@ $red: #E74C3C;
 
 $map-padding: 5px;
 
+$plane-size: 20px;
+
 html, body {
   height: 100%;
   overflow: hidden;
@@ -124,4 +126,13 @@ h1 {
   height: 100%;
   background-color: $dark-blue;
   opacity: 0.6;
+}
+
+.plane {
+  position: absolute;
+  pointer-events:none;
+  margin-top: -($plane-size / 2);  // Move the pivot point to the center.
+  margin-left: -($plane-size / 2);
+  width: $plane-size;
+  height: $plane-size;
 }
