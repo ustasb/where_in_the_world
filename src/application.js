@@ -13,19 +13,49 @@
 
     function App() {
       var _this = this;
-      ProgressBar.hide();
       QuizBox.init();
-      QuizBox.hide();
       QuizBox.onMenuClick = function() {
-        _this._endQuiz();
-        return _this._renderMap(_this.menu.getSelectedMap());
+        return _this._showMainMenuView();
       };
       this.menu = new Menu({
-        onSelectMap: $.proxy(this._renderMap, this),
-        onStartQuiz: $.proxy(this._startQuiz, this)
+        onSelectMap: function(mapName) {
+          return _this._renderMap(mapName);
+        },
+        onStartQuiz: function() {
+          return _this._startQuiz();
+        }
       });
+      this._showMainMenuView();
       this._renderMap(this.menu.getSelectedMap());
     }
+
+    App.prototype._showMainMenuView = function() {
+      ProgressBar.hide();
+      QuizBox.hide();
+      return this.menu.show();
+    };
+
+    App.prototype._showQuizView = function() {
+      this.menu.hide();
+      QuizBox.show();
+      return ProgressBar.show();
+    };
+
+    App.prototype._startQuiz = function() {
+      this.map.clearSelectedRegions();
+      ProgressBar.reset();
+      this.menu.hideScore();
+      this._initLocationQuiz();
+      this._showQuizView();
+      return this.quizStartTime = (new Date).getTime();
+    };
+
+    App.prototype._endQuiz = function(numCorrect, questionCount) {
+      var elapsedTime;
+      elapsedTime = (new Date).getTime() - this.quizStartTime;
+      this._showMainMenuView();
+      return this.menu.showScore(numCorrect, questionCount, elapsedTime);
+    };
 
     App.prototype._renderMap = function(mapName) {
       if (this.map) {
@@ -35,16 +65,7 @@
       return this.map.render();
     };
 
-    App.prototype._startQuiz = function() {
-      this.menu.hide();
-      this.menu.hideScore();
-      this.map.clearSelectedRegions();
-      this._startLocationQuiz();
-      QuizBox.show();
-      return ProgressBar.show();
-    };
-
-    App.prototype._startLocationQuiz = function() {
+    App.prototype._initLocationQuiz = function() {
       var quiz,
         _this = this;
       quiz = new LocationQuiz(this.map.getRegions());
@@ -57,7 +78,7 @@
           return _this.map.isRegionSelected(code);
         },
         regionClick: function(e, regionCode) {
-          var askedRegion, clickedRegion, nextQuestion;
+          var askedRegion, clickedRegion, nextQuestion, status;
           clickedRegion = _this.map.regionForCode(regionCode);
           askedRegion = quiz.currentRegion;
           if (quiz.answerQuestion(clickedRegion)) {
@@ -69,17 +90,11 @@
           if (nextQuestion = quiz.getQuestion()) {
             return QuizBox.askQuestion(nextQuestion);
           } else {
-            return _this._endQuiz();
+            status = quiz.status();
+            return _this._endQuiz(status.numCorrect, status.questionCount);
           }
         }
       });
-    };
-
-    App.prototype._endQuiz = function() {
-      QuizBox.hide();
-      ProgressBar.reset();
-      ProgressBar.hide();
-      return this.menu.show();
     };
 
     return App;
@@ -435,12 +450,26 @@
       return $('#map-type .pure-button-active').first().data('map');
     };
 
-    Menu.prototype.showScore = function(numCorrect) {
-      return $('#score').show().children('span').text(numCorrect);
+    Menu.prototype.showScore = function(numCorrect, questionCount, elapsedTime) {
+      return $('#score').show().text("" + numCorrect + " out of " + questionCount + " correct in " + (this._formatTimeStr(elapsedTime)));
     };
 
     Menu.prototype.hideScore = function(numCorrect) {
       return $('#score').hide();
+    };
+
+    Menu.prototype._formatTimeStr = function(milliseconds) {
+      var minutes, minutesString, seconds, secondsString;
+      seconds = (milliseconds / 1000).toFixed(2);
+      minutes = Math.floor(seconds / 60).toString();
+      seconds = (seconds % 60).toFixed(2);
+      secondsString = seconds === '1.00' ? '1 second' : "" + seconds + " seconds";
+      if (minutes === '0') {
+        return secondsString;
+      } else {
+        minutesString = minutes === '1' ? '1 minute' : "" + minutes + " minutes";
+        return "" + minutesString + " and " + secondsString;
+      }
     };
 
     Menu.prototype._createMenu = function() {

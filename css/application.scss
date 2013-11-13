@@ -67,7 +67,7 @@ h1 {
   pointer-events: none;
   margin-top: -3px;
   margin-left: -5px;
-  padding: 5px 7px;
+  padding: 4px 7px;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   color: $blue;
@@ -83,6 +83,11 @@ h1 {
   width: 550px;
   padding: 10px 20px 20px 20px;
   overflow: hidden;
+
+  #score {
+    margin-left: 15px;
+    margin-bottom: 30px;
+  }
 
   form {
     margin-left: -100px;
@@ -110,6 +115,10 @@ h1 {
   width: 300px;
   padding: 10px;
   border: 2px solid $blue;
+
+  h3 {
+    margin: 5px 0 15px 0;
+  }
 
   .icon-reorder {
     position: absolute;

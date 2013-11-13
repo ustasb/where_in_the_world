@@ -4,35 +4,48 @@ class window.App
   INCORRECT_REGION_COLOR = '#E74C3C'
 
   constructor: ->
-    ProgressBar.hide()
-
     QuizBox.init()
-    QuizBox.hide()
-    QuizBox.onMenuClick = =>
-      @_endQuiz()
-      @_renderMap( @menu.getSelectedMap() )
+    QuizBox.onMenuClick = => @_showMainMenuView()
 
     @menu = new Menu
-      onSelectMap: $.proxy(@_renderMap, @)
-      onStartQuiz: $.proxy(@_startQuiz, @)
+      onSelectMap: (mapName) => @_renderMap(mapName)
+      onStartQuiz: => @_startQuiz()
 
+    @_showMainMenuView()
     @_renderMap( @menu.getSelectedMap() )
+
+  _showMainMenuView: ->
+    ProgressBar.hide()
+    QuizBox.hide()
+    @menu.show()
+
+  _showQuizView: ->
+    @menu.hide()
+    QuizBox.show()
+    ProgressBar.show()
+
+  _startQuiz: ->
+    @map.clearSelectedRegions()
+    ProgressBar.reset()
+    @menu.hideScore()
+
+    @_initLocationQuiz()
+    @_showQuizView()
+
+    @quizStartTime = (new Date).getTime()
+
+  _endQuiz: (numCorrect, questionCount) ->
+    elapsedTime = (new Date).getTime() - @quizStartTime
+
+    @_showMainMenuView()
+    @menu.showScore(numCorrect, questionCount, elapsedTime)
 
   _renderMap: (mapName) ->
     @map.destroy() if @map
     @map = new Map(MAP_CONTAINER_ID, mapName)
     @map.render()
 
-  _startQuiz: ->
-    @menu.hide()
-    @menu.hideScore()
-    @map.clearSelectedRegions()
-
-    @_startLocationQuiz()
-    QuizBox.show()
-    ProgressBar.show()
-
-  _startLocationQuiz: ->
+  _initLocationQuiz: ->
     quiz = new LocationQuiz( @map.getRegions() )
     QuizBox.askQuestion( quiz.getQuestion() )
     QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
@@ -55,12 +68,5 @@ class window.App
         if nextQuestion = quiz.getQuestion()
           QuizBox.askQuestion(nextQuestion)
         else
-          @_endQuiz()
-
-  _endQuiz: ->
-    QuizBox.hide()
-
-    ProgressBar.reset()
-    ProgressBar.hide()
-
-    @menu.show()
+          status = quiz.status()
+          @_endQuiz(status.numCorrect, status.questionCount)
