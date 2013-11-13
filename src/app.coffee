@@ -19,6 +19,7 @@ class window.App
     @_renderMap( @menu.getSelectedMap() )
 
   _renderMap: (mapName) ->
+    @map.destroy() if @map
     @map = new Map(MAP_CONTAINER_ID, mapName)
     @map.render()
 

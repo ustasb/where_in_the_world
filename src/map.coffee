@@ -1,5 +1,7 @@
 class Map
   BACKGROUND_COLOR = '#2980B9'
+  MAX_PLANE_COUNT = 20
+  PLANE_SPEED = 1 / 10
 
   @loadMap: do ->
     loaded = {}
@@ -18,7 +20,15 @@ class Map
     @mapName = mapName
 
   render: ->
-    Map.loadMap @mapName, => @_createMap()
+    Map.loadMap @mapName, =>
+      @_createMap()
+      @flightControl = new FlightControl(@, MAX_PLANE_COUNT, PLANE_SPEED)
+      @flightControl.spawnFlights()
+
+  destroy: ->
+    @el.empty()
+    @flightControl.haltFlights()
+    @flightControl.destroyAll()
 
   clearSelectedRegions: ->
     @map.clearSelectedRegions()
@@ -41,18 +51,35 @@ class Map
   getRegions: ->
     (data.config.name for regionCode, data of @map.regions)
 
+  latLngToPoint: (lat, lng) ->
+    @map.latLngToPoint(lat, lng)
+
   bindEvents: (events) ->
     @el.unbind()  # Remove any existing events
 
     for event, callback of events
       @el.bind("#{event}.jvectormap", callback)
 
-  _createMap: ->
-    @el.empty()
+  getRandomLatLng: ->
+    @regionKeys ?= Object.keys(@map.regions)
 
+    latLng = null
+    randKey = @regionKeys[Math.floor(Math.random() * @regionKeys.length)]
+    region = @map.regions[randKey]
+    bBox = region.element.node.getBoundingClientRect()
+
+    until latLng
+      point =
+        x: bBox.left + Math.random() * bBox.width
+        y: bBox.top + Math.random() * bBox.height
+
+      latLng = @map.pointToLatLng(point.x, point.y)
+
+    latLng
+
+  _createMap: ->
     @el.vectorMap
       map: @mapName,
       backgroundColor: BACKGROUND_COLOR
 
     @map = @el.vectorMap('get', 'mapObject')
-
