@@ -53,11 +53,16 @@ class Plane
     @oldLat = curvedLat
 
     if pos
+      rotateVal = "rotate(#{-facingAng}rad)"
+
       @el.show().css
         left: pos.x
         top: pos.y
         width: size
         height: size
-        '-webkit-transform': "rotate(#{-facingAng}rad)"
+        '-webkit-transform': rotateVal # Chrome/ Safari
+        '-moz-transform': rotateVal # Firefox
+        '-ms-transform': rotateVal # IE
+        '-o-transform': rotateVal # Opera
     else
       @el.hide()

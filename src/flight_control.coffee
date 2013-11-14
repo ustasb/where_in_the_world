@@ -1,3 +1,8 @@
+window.requestAnimationFrame = window.requestAnimationFrame ||
+                               window.mozRequestAnimationFrame ||
+                               window.webkitRequestAnimationFrame ||
+                               window.msRequestAnimationFrame
+
 class FlightControl
   MIN_FLIGHT_DIST = 10
 
