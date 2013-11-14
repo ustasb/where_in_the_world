@@ -5,7 +5,7 @@ class Plane
   @getRandomPlaneImg: ->
     PLANE_IMGS[Math.floor(Math.random() * PLANE_IMGS.length)]
 
-  constructor: (@map, start, @end, @speed) ->
+  constructor: (@map, start, @end) ->
     @pos = start
 
     @flightDist = Math.sqrt(
@@ -23,15 +23,15 @@ class Plane
     dx = @end.lng - @pos.lng
     dy = @end.lat - @pos.lat
     distLeft = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
-    distLeft <= @speed
+    distLeft <= @map.planeSpeed
 
   update: ->
     dx = @end.lng - @pos.lng
     dy = @end.lat - @pos.lat
     @ang = Math.atan2(dy, dx)
 
-    @pos.lng += Math.cos(@ang) * @speed
-    @pos.lat += Math.sin(@ang) * @speed
+    @pos.lng += Math.cos(@ang) * @map.planeSpeed
+    @pos.lat += Math.sin(@ang) * @map.planeSpeed
 
     distLeft = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
     @amplitude = Math.sin((distLeft / @flightDist) * Math.PI)

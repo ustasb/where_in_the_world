@@ -7,6 +7,10 @@ $red: #E74C3C;
 $map-padding: 5px;
 $plane-size: 20px;
 
+// Prevent the map from being so small that no random
+// points can be generated from it.
+$min-map-size: 100px;
+
 html, body {
   height: 100%;
   overflow: hidden;
@@ -59,6 +63,8 @@ h1 {
   padding: $map-padding;
   width: 100%;
   height: 100%;
+  min-height: $min-map-size;
+  min-width: $min-map-size;
 }
 
 .jvectormap-label {

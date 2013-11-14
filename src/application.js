@@ -304,7 +304,7 @@
 
     MAX_PLANE_COUNT = 20;
 
-    PLANE_SPEED = 1 / 10;
+    PLANE_SPEED = 1.5;
 
     Map.loadMap = (function() {
       var loaded;
@@ -325,13 +325,18 @@
     function Map(containerID, mapName) {
       this.el = $('#' + containerID);
       this.mapName = mapName;
+      this._updatePlaneSpeed = $.proxy((function() {
+        return this.planeSpeed = this._getPlaneSpeed();
+      }), this);
+      $(window).resize(this._updatePlaneSpeed);
     }
 
     Map.prototype.render = function() {
       var _this = this;
       return Map.loadMap(this.mapName, function() {
         _this._createMap();
-        _this.flightControl = new FlightControl(_this, MAX_PLANE_COUNT, PLANE_SPEED);
+        _this._updatePlaneSpeed();
+        _this.flightControl = new FlightControl(_this, MAX_PLANE_COUNT);
         return _this.flightControl.spawnFlights();
       });
     };
@@ -339,7 +344,8 @@
     Map.prototype.destroy = function() {
       this.el.empty();
       this.flightControl.haltFlights();
-      return this.flightControl.destroyAll();
+      this.flightControl.destroyAll();
+      return $(window).unbind('resize', this._updatePlaneSpeed);
     };
 
     Map.prototype.clearSelectedRegions = function() {
@@ -399,22 +405,27 @@
     };
 
     Map.prototype.getRandomLatLng = function() {
-      var bBox, latLng, point, randKey, region;
+      var bBox, i, latLng, maxAttemptsPerRegion, point, randKey, region, _i;
       if (this.regionKeys == null) {
         this.regionKeys = Object.keys(this.map.regions);
       }
+      maxAttemptsPerRegion = 5;
       latLng = null;
-      randKey = this.regionKeys[Math.floor(Math.random() * this.regionKeys.length)];
-      region = this.map.regions[randKey];
-      bBox = region.element.node.getBoundingClientRect();
-      while (!latLng) {
-        point = {
-          x: bBox.left + Math.random() * bBox.width,
-          y: bBox.top + Math.random() * bBox.height
-        };
-        latLng = this.map.pointToLatLng(point.x, point.y);
+      while (true) {
+        randKey = this.regionKeys[Math.floor(Math.random() * this.regionKeys.length)];
+        region = this.map.regions[randKey];
+        bBox = region.element.node.getBoundingClientRect();
+        for (i = _i = 0; _i < maxAttemptsPerRegion; i = _i += 1) {
+          point = {
+            x: bBox.left + Math.random() * bBox.width,
+            y: bBox.top + Math.random() * bBox.height
+          };
+          latLng = this.map.pointToLatLng(point.x, point.y);
+          if (latLng) {
+            return latLng;
+          }
+        }
       }
-      return latLng;
     };
 
     Map.prototype._createMap = function() {
@@ -423,6 +434,16 @@
         backgroundColor: BACKGROUND_COLOR
       });
       return this.map = this.el.vectorMap('get', 'mapObject');
+    };
+
+    Map.prototype._getPlaneSpeed = function() {
+      var bBox, bottomRight, distLatlng, distPixels, topLeft;
+      bBox = this.map.canvas.node.firstChild.getBoundingClientRect();
+      distPixels = Math.sqrt(Math.pow(bBox.width, 2) + Math.pow(bBox.height, 2));
+      topLeft = this.map.pointToLatLng(bBox.left, bBox.top);
+      bottomRight = this.map.pointToLatLng(bBox.left + bBox.width - 50, bBox.top + bBox.height - 50);
+      distLatlng = Math.sqrt(Math.pow(bottomRight.lng - topLeft.lng, 2) + Math.pow(bottomRight.lat - topLeft.lat, 2));
+      return PLANE_SPEED / (distPixels / distLatlng);
     };
 
     return Map;
@@ -509,10 +530,9 @@
       return PLANE_IMGS[Math.floor(Math.random() * PLANE_IMGS.length)];
     };
 
-    function Plane(map, start, end, speed) {
+    function Plane(map, start, end) {
       this.map = map;
       this.end = end;
-      this.speed = speed;
       this.pos = start;
       this.flightDist = Math.sqrt(Math.pow(end.lng - start.lng, 2) + Math.pow(end.lat - start.lat, 2));
       this.el = $("<img class='plane' src='" + (Plane.getRandomPlaneImg()) + "' />");
@@ -528,7 +548,7 @@
       dx = this.end.lng - this.pos.lng;
       dy = this.end.lat - this.pos.lat;
       distLeft = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-      return distLeft <= this.speed;
+      return distLeft <= this.map.planeSpeed;
     };
 
     Plane.prototype.update = function() {
@@ -536,8 +556,8 @@
       dx = this.end.lng - this.pos.lng;
       dy = this.end.lat - this.pos.lat;
       this.ang = Math.atan2(dy, dx);
-      this.pos.lng += Math.cos(this.ang) * this.speed;
-      this.pos.lat += Math.sin(this.ang) * this.speed;
+      this.pos.lng += Math.cos(this.ang) * this.map.planeSpeed;
+      this.pos.lat += Math.sin(this.ang) * this.map.planeSpeed;
       distLeft = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
       return this.amplitude = Math.sin((distLeft / this.flightDist) * Math.PI);
     };
