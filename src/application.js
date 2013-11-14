@@ -101,6 +101,8 @@
 
   })();
 
+  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
   FlightControl = (function() {
     var MIN_FLIGHT_DIST;
 
@@ -563,7 +565,7 @@
     };
 
     Plane.prototype.render = function() {
-      var curveHeight, curvedLat, curvedLng, facingAng, pos, size;
+      var curveHeight, curvedLat, curvedLng, facingAng, pos, rotateVal, size;
       size = this.amplitude * (PLANE_SIZE * 2);
       size = size > PLANE_SIZE ? PLANE_SIZE : size;
       curveHeight = this.amplitude * 3;
@@ -574,12 +576,16 @@
       this.oldLng = curvedLng;
       this.oldLat = curvedLat;
       if (pos) {
+        rotateVal = "rotate(" + (-facingAng) + "rad)";
         return this.el.show().css({
           left: pos.x,
           top: pos.y,
           width: size,
           height: size,
-          '-webkit-transform': "rotate(" + (-facingAng) + "rad)"
+          '-webkit-transform': rotateVal,
+          '-moz-transform': rotateVal,
+          '-ms-transform': rotateVal,
+          '-o-transform': rotateVal
         });
       } else {
         return this.el.hide();

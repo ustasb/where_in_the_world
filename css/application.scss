@@ -19,8 +19,11 @@ html, body {
 body {
   position: relative;
   background-color: $blue;
-  font-family: 'Roboto', sans-serif;
   font-size: 16px;
+}
+
+body, div, span, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
   font-weight: 300;
   color: $dark-blue;
 }
@@ -67,6 +70,7 @@ h1 {
   min-width: $min-map-size;
 }
 
+// Overriding jVectorMap's class
 .jvectormap-label {
   @include box-shadow(1px, 4px, $dark-blue);
   @include border-radius(3px);
@@ -75,6 +79,7 @@ h1 {
   margin-left: -5px;
   padding: 4px 7px;
   font-family: 'Roboto', sans-serif;
+  font-size: 14px;
   font-weight: 300;
   color: $blue;
   background-color: $white;
