@@ -95,6 +95,12 @@ h1 {
   padding: 10px 20px 20px 20px;
   overflow: hidden;
 
+  .fb-like {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
   #score {
     margin-left: 15px;
     margin-bottom: 30px;
