@@ -1,11 +1,14 @@
-class Menu
-  constructor: (opts) ->
+MainMenu = do ->
+  $el = $('#main-menu')
+  $score = $el.children('#score')
+
+  init: (opts) ->
     @onSelectMap = opts.onSelectMap
     @onStartQuiz = opts.onStartQuiz
 
     @_createMenu()
-    @hideScore()
     @_bindEvents()
+    @hideScore()
 
   show: ->
     @lightbox.show()
@@ -14,15 +17,15 @@ class Menu
     @lightbox.hide()
 
   getSelectedMap: ->
-    $('#map-type .pure-button-active').first().data('map')
+    $el.find('#map-type .pure-button-active').first().data('map')
 
   showScore: (numCorrect, questionCount, elapsedTime) ->
-    $('#score').show().text(
+    $score.show().text(
       "#{numCorrect} out of #{questionCount} correct in #{@_formatTimeStr(elapsedTime)}"
     )
 
   hideScore: (numCorrect) ->
-    $('#score').hide()
+    $score.hide()
 
   _formatTimeStr: (milliseconds) ->
     seconds = (milliseconds / 1000).toFixed(2)  # round to 2 decimal places
@@ -39,12 +42,12 @@ class Menu
       "#{minutesString} and #{secondsString}"
 
   _createMenu: ->
-    @lightbox = new LightBox('menu')
+    @lightbox = new LightBox('main-menu')
 
   _bindEvents: ->
-    $('#start-quiz').click( $.proxy(@onStartQuiz, @) )
+    $el.find('#start-quiz').click => @onStartQuiz()
 
-    $('#map-type .pure-button').click do =>
+    $el.find('#map-type .pure-button').click do =>
       $active = $('#map-type .pure-button-active')
 
       (e) =>

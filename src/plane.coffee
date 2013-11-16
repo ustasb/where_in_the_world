@@ -1,9 +1,6 @@
 class Plane
-  PLANE_IMGS = ['imgs/airplane_orange.svg', 'imgs/airplane_blue.svg']
+  PLANE_IMG = 'imgs/airplane_blue.svg'
   PLANE_SIZE = 20
-
-  @getRandomPlaneImg: ->
-    PLANE_IMGS[Math.floor(Math.random() * PLANE_IMGS.length)]
 
   constructor: (@map, start, @end) ->
     @pos = start
@@ -13,7 +10,7 @@ class Plane
       Math.pow(end.lat - start.lat, 2)
     )
 
-    @el = $("<img class='plane' src='#{Plane.getRandomPlaneImg()}' />")
+    @el = $("<img class='plane' src='#{PLANE_IMG}' />")
     @map.el.append(@el)
 
   destroy: ->
