@@ -7,27 +7,27 @@ class window.App
     QuizBox.init()
     QuizBox.onMenuClick = => @_showMainMenuView()
 
-    @menu = new Menu
+    MainMenu.init
       onSelectMap: (mapName) => @_renderMap(mapName)
       onStartQuiz: => @_startQuiz()
 
     @_showMainMenuView()
-    @_renderMap( @menu.getSelectedMap() )
+    @_renderMap( MainMenu.getSelectedMap() )
 
   _showMainMenuView: ->
     ProgressBar.hide()
     QuizBox.hide()
-    @menu.show()
+    MainMenu.show()
 
   _showQuizView: ->
-    @menu.hide()
+    MainMenu.hide()
     QuizBox.show()
     ProgressBar.show()
 
   _startQuiz: ->
     @map.clearSelectedRegions()
     ProgressBar.reset()
-    @menu.hideScore()
+    MainMenu.hideScore()
 
     @_initLocationQuiz()
     @_showQuizView()
@@ -38,7 +38,7 @@ class window.App
     elapsedTime = (new Date).getTime() - @quizStartTime
 
     @_showMainMenuView()
-    @menu.showScore(numCorrect, questionCount, elapsedTime)
+    MainMenu.showScore(numCorrect, questionCount, elapsedTime)
 
   _renderMap: (mapName) ->
     @map.destroy() if @map

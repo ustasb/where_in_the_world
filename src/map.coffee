@@ -1,6 +1,6 @@
 class Map
   BACKGROUND_COLOR = '#2980B9'
-  MAX_PLANE_COUNT = 20
+  MAX_PLANE_COUNT = 10
   PLANE_SPEED = 1.5
 
   @loadMap: do ->
@@ -67,14 +67,11 @@ class Map
       @el.bind("#{event}.jvectormap", callback)
 
   getRandomLatLng: ->
-    @regionKeys ?= Object.keys(@map.regions)
     maxAttemptsPerRegion = 5
     latLng = null
 
     loop
-      randKey = @regionKeys[Math.floor(Math.random() * @regionKeys.length)]
-      region = @map.regions[randKey]
-      bBox = region.element.node.getBoundingClientRect()
+      bBox = @_getRegion().element.node.getBoundingClientRect()
 
       for i in [0...maxAttemptsPerRegion] by 1
         point =
@@ -84,6 +81,12 @@ class Map
         latLng = @map.pointToLatLng(point.x, point.y)
         return latLng if latLng
 
+  # Returns a random region unless an index is specified.
+  _getRegion: (index) ->
+    @regionKeys ?= Object.keys(@map.regions)
+    index ?= Math.floor(Math.random() * @regionKeys.length)
+    @map.regions[ @regionKeys[index] ]
+
   _createMap: ->
     @el.vectorMap
       map: @mapName,
@@ -91,16 +94,17 @@ class Map
 
     @map = @el.vectorMap('get', 'mapObject')
 
+  # Keeps the plane speed consistent between differently scaled maps.
   _getPlaneSpeed: ->
     # Container immediately surrounding the map.
-    bBox = @map.canvas.node.firstChild.getBoundingClientRect()
+    bBox = @_getRegion(1).element.node.getBoundingClientRect()
 
     # Diagonal distance in pixels.
     distPixels = Math.sqrt(Math.pow(bBox.width, 2) + Math.pow(bBox.height, 2))
 
     # Diagonal distance in latLng.
     topLeft = @map.pointToLatLng(bBox.left, bBox.top)
-    bottomRight = @map.pointToLatLng(bBox.left + bBox.width - 50, bBox.top + bBox.height - 50)
-    distLatlng = Math.sqrt(Math.pow(bottomRight.lng - topLeft.lng, 2) + Math.pow(bottomRight.lat - topLeft.lat, 2))
+    bottomRight = @map.pointToLatLng(bBox.left + bBox.width, bBox.top + bBox.height)
+    distLatLng = Math.sqrt(Math.pow(bottomRight.lng - topLeft.lng, 2) + Math.pow(bottomRight.lat - topLeft.lat, 2))
 
-    PLANE_SPEED / (distPixels / distLatlng)
+    PLANE_SPEED / (distPixels / distLatLng)

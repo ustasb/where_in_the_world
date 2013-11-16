@@ -19,7 +19,7 @@ h1 {
 .pure-button-primary {
   font-weight: 100; }
 
-.container, #menu, #quiz-box {
+.container, #main-menu, #quiz-box {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
@@ -55,18 +55,18 @@ h1 {
   background-color: white;
   border: 1px solid #2980b9; }
 
-#menu {
+#main-menu {
   width: 550px;
   padding: 10px 20px 20px 20px;
   overflow: hidden; }
-  #menu #score {
+  #main-menu #score {
     margin-left: 15px;
     margin-bottom: 30px; }
-  #menu form {
+  #main-menu form {
     margin-left: -100px; }
-    #menu form #start-quiz {
+    #main-menu form #start-quiz {
       margin-left: 2px; }
-  #menu #globe {
+  #main-menu .fa-globe {
     position: absolute;
     bottom: -65px;
     right: -55px;
@@ -77,20 +77,23 @@ h1 {
 #quiz-box {
   position: absolute;
   z-index: 3;
-  top: 10px;
   right: 10px;
   width: 300px;
   padding: 10px;
   border: 2px solid #2980b9; }
   #quiz-box h3 {
     margin: 5px 0 15px 0; }
-  #quiz-box .icon-reorder {
+  #quiz-box .fa {
     position: absolute;
+    color: #2980b9;
+    cursor: pointer;
+    top: 7px;
+    right: 39px;
+    font-size: 19px; }
+  #quiz-box .fa-bars {
     top: 6px;
     right: 10px;
-    font-size: 22px;
-    color: #2980b9;
-    cursor: pointer; }
+    font-size: 22px; }
 
 #progress-bar {
   position: absolute;

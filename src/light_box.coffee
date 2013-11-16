@@ -1,17 +1,11 @@
 class LightBox
-  backdrop = $('<div class="light-box-bg"></div>')
+  $backdrop = $('<div class="light-box-bg"></div>')
 
-  @showBackdrop: do ->
-    added = false
-    ->
-      if added
-        backdrop.show()
-      else
-        $(document.body).append(backdrop)
-        added = true
+  @showBackdrop: ->
+    $(document.body).append($backdrop)
 
   @hideBackdrop: ->
-    backdrop.hide()
+    $backdrop.remove()
 
   constructor: (containerID) ->
     @el = $('#' + containerID)
