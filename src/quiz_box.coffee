@@ -1,6 +1,8 @@
 QuizBox = do ->
+  ENTER_BUTTON_CODE = 13
   VERT_MARGIN = 10
   $el = $('#quiz-box')
+  $input = $el.find('.quiz-input')
 
   init: ->
     @isTop = true
@@ -12,6 +14,11 @@ QuizBox = do ->
     $el.children('.skip-question').click -> QuizBox.onSkipQuestion()
     $el.children('.main-menu').click -> QuizBox.onMenuClick()
     $el.children('.fa-arrow-down').click -> QuizBox.toggleVertPosition()
+    $input.keypress (e) ->
+      if e.which is ENTER_BUTTON_CODE
+        QuizBox.onInputEnter($input.val())
+        $input.val('')
+        e.preventDefault()
 
   toggleVertPosition: ->
     offset = $(window).height() - ($el.outerHeight() + VERT_MARGIN)
@@ -38,10 +45,14 @@ QuizBox = do ->
   askQuestion: (question) ->
     $el.children('h3').text(question)
 
-  show: -> $el.show()
+  show: (showInput = false) ->
+    $el.show()
+    if showInput then $input.show().focus() else $input.hide()
 
   hide: -> $el.hide()
 
   onMenuClick: -> throw new Error('Must be overwritten!')
 
   onSkipQuestion: -> throw new Error('Must be overwritten!')
+
+  onInputEnter: -> throw new Error('Must be overwritten!')

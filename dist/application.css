@@ -16,6 +16,11 @@ h1 {
   font-size: 2.6em;
   font-weight: 100; }
 
+input {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  height: 37px; }
+
 .pure-button-primary {
   font-weight: 100; }
 
@@ -82,11 +87,19 @@ h1 {
   position: absolute;
   z-index: 3;
   right: 10px;
-  width: 300px;
+  width: 350px;
   padding: 10px;
   border: 2px solid #2980b9; }
   #quiz-box h3 {
-    margin: 5px 0 15px 0; }
+    margin: 5px 0 15px 0;
+    width: 295px; }
+  #quiz-box .skip-question {
+    float: left; }
+  #quiz-box form {
+    float: left; }
+    #quiz-box form input {
+      font-size: 18px;
+      margin-left: 10px; }
   #quiz-box .fa {
     position: absolute;
     color: #2980b9;

@@ -19,9 +19,9 @@ class window.App
     QuizBox.hide()
     MainMenu.show()
 
-  _showQuizView: ->
+  _showQuizView: (showInput) ->
     MainMenu.hide()
-    QuizBox.show()
+    QuizBox.show(showInput)
     ProgressBar.show()
 
   _startQuiz: ->
@@ -29,8 +29,13 @@ class window.App
     ProgressBar.reset()
     MainMenu.hideScore()
 
-    @_initLocationQuiz()
-    @_showQuizView()
+    switch MainMenu.getSelectedQuiz()
+      when 'location'
+        @_showQuizView()
+        @_initLocationQuiz()
+      when 'capital'
+        @_showQuizView(true)
+        @_initCapitalQuiz()
 
     @quizStartTime = (new Date).getTime()
 
@@ -70,3 +75,29 @@ class window.App
         else
           status = quiz.status()
           @_endQuiz(status.numCorrect, status.questionCount)
+
+  _initCapitalQuiz: ->
+    mapName = MainMenu.getSelectedMap()
+    quiz = new CapitalQuiz(@map.getRegions(), mapName is 'us_mill_en')
+
+    QuizBox.askQuestion( quiz.getQuestion() )
+    QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
+    QuizBox.onInputEnter = (guess) =>
+      regionCode = @map.codeForRegion(quiz.currentRegion)
+
+      if quiz.answerQuestion(guess)
+        @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
+      else
+        @map.selectRegion(regionCode, INCORRECT_REGION_COLOR)
+
+      ProgressBar.update( quiz.percentComplete() )
+
+      if nextQuestion = quiz.getQuestion()
+        QuizBox.askQuestion(nextQuestion)
+      else
+        status = quiz.status()
+        @_endQuiz(status.numCorrect, status.questionCount)
+
+    @map.bindEvents
+      regionLabelShow: (e, label, code) =>
+        console.log(label)

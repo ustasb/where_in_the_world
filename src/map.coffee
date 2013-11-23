@@ -94,6 +94,8 @@ class Map
 
     @map = @el.vectorMap('get', 'mapObject')
 
+    window.m =  @map
+
   # Keeps the plane speed consistent between differently scaled maps.
   _getPlaneSpeed: ->
     # Container immediately surrounding the map.
