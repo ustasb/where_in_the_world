@@ -12,13 +12,13 @@ class CapitalQuiz
     else
       randomIndex = Math.floor (Math.random() * @regions.length)
       @currentRegion = @regions[ randomIndex ]
-      "What is the capital of #{@regionData[@currentRegion.toLowerCase()].prettyName}?"
+      "What is the capital of #{@dataForRegion(@currentRegion).prettyName}?"
 
   answerQuestion: (answer) ->
     index = $.inArray(@currentRegion, @regions)
     @regions.splice(index, 1)
 
-    correct = @_validateGuess(answer, @regionData[@currentRegion.toLowerCase()].capital)
+    correct = @_validateGuess(answer, @dataForRegion(@currentRegion).capital)
     @numCorrect += 1 if correct
     @currentRegion = null
     correct
@@ -31,8 +31,12 @@ class CapitalQuiz
     questionCount: @regionsCount
     numCorrect: @numCorrect
 
+  dataForRegion: (region) ->
+    region = region.toLowerCase()
+    @regionData[region]
+
   # Credit: https://raw.github.com/acmeism/RosettaCodeData/master/Task/Levenshtein-distance/CoffeeScript/levenshtein-distance.coffee
-  levenshteinDist: (str1, str2) ->
+  _levenshteinDist: (str1, str2) ->
     m = str1.length
     n = str2.length
     d = []
@@ -64,6 +68,6 @@ class CapitalQuiz
     # You have to get the first letter right!
     if guess[0] is answer[0]
       guess is answer or
-      @levenshteinDist(guess, answer) <= Math.floor(answer.length / 3)
+      @_levenshteinDist(guess, answer) <= Math.floor(answer.length / 3)
     else
       false

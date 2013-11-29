@@ -90,7 +90,7 @@ class window.App
       else
         @map.selectRegion(regionCode, INCORRECT_REGION_COLOR)
 
-      ProgressBar.update( quiz.percentComplete() )
+      ProgressBar.update(quiz.percentComplete())
 
       if nextQuestion = quiz.getQuestion()
         QuizBox.askQuestion(nextQuestion)
@@ -100,4 +100,6 @@ class window.App
 
     @map.bindEvents
       regionLabelShow: (e, label, code) =>
-        console.log(label)
+        if @map.isRegionSelected(code)
+          region = label.text()
+          label.text("#{region} | #{quiz.dataForRegion(region).capital}")

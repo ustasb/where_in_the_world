@@ -131,7 +131,11 @@
       };
       return this.map.bindEvents({
         regionLabelShow: function(e, label, code) {
-          return console.log(label);
+          var region;
+          if (_this.map.isRegionSelected(code)) {
+            region = label.text();
+            return label.text("" + region + " | " + (quiz.dataForRegion(region).capital));
+          }
         }
       });
     };
@@ -159,7 +163,7 @@
       } else {
         randomIndex = Math.floor(Math.random() * this.regions.length);
         this.currentRegion = this.regions[randomIndex];
-        return "What is the capital of " + this.regionData[this.currentRegion.toLowerCase()].prettyName + "?";
+        return "What is the capital of " + (this.dataForRegion(this.currentRegion).prettyName) + "?";
       }
     };
 
@@ -167,7 +171,7 @@
       var correct, index;
       index = $.inArray(this.currentRegion, this.regions);
       this.regions.splice(index, 1);
-      correct = this._validateGuess(answer, this.regionData[this.currentRegion.toLowerCase()].capital);
+      correct = this._validateGuess(answer, this.dataForRegion(this.currentRegion).capital);
       if (correct) {
         this.numCorrect += 1;
       }
@@ -187,7 +191,12 @@
       };
     };
 
-    CapitalQuiz.prototype.levenshteinDist = function(str1, str2) {
+    CapitalQuiz.prototype.dataForRegion = function(region) {
+      region = region.toLowerCase();
+      return this.regionData[region];
+    };
+
+    CapitalQuiz.prototype._levenshteinDist = function(str1, str2) {
       var d, i, j, m, n, _i, _j, _k, _l;
       m = str1.length;
       n = str2.length;
@@ -220,7 +229,7 @@
       guess = guess.toLowerCase();
       answer = answer.toLowerCase();
       if (guess[0] === answer[0]) {
-        return guess === answer || this.levenshteinDist(guess, answer) <= Math.floor(answer.length / 3);
+        return guess === answer || this._levenshteinDist(guess, answer) <= Math.floor(answer.length / 3);
       } else {
         return false;
       }
