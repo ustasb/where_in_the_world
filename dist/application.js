@@ -113,9 +113,11 @@
       QuizBox.onSkipQuestion = function() {
         return QuizBox.askQuestion(quiz.getQuestion());
       };
-      QuizBox.onInputEnter = function(guess) {
-        var nextQuestion, regionCode, status;
-        regionCode = _this.map.codeForRegion(quiz.currentRegion);
+      QuizBox.onInputEnter = function($input) {
+        var currentRegion, guess, nextQuestion, regionCode, status;
+        guess = $input.val();
+        currentRegion = quiz.currentRegion;
+        regionCode = _this.map.codeForRegion(currentRegion);
         if (quiz.answerQuestion(guess)) {
           _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
         } else {
@@ -747,11 +749,12 @@
   })();
 
   QuizBox = (function() {
-    var $el, $input, ENTER_BUTTON_CODE, VERT_MARGIN;
+    var $el, $flashBox, $input, ENTER_BUTTON_CODE, VERT_MARGIN;
     ENTER_BUTTON_CODE = 13;
     VERT_MARGIN = 10;
     $el = $('#quiz-box');
     $input = $el.find('.quiz-input');
+    $flashBox = $el.find('.flash-box');
     return {
       init: function() {
         this.isTop = true;
@@ -772,7 +775,7 @@
         });
         return $input.keypress(function(e) {
           if (e.which === ENTER_BUTTON_CODE) {
-            QuizBox.onInputEnter($input.val());
+            QuizBox.onInputEnter($input);
             $input.val('');
             return e.preventDefault();
           }
@@ -809,6 +812,21 @@
       askQuestion: function(question) {
         return $el.children('h3').text(question);
       },
+      flashMessage: (function() {
+        var timer;
+        timer = null;
+        return function(msg, color) {
+          if (color == null) {
+            color = '';
+          }
+          clearTimeout(timer);
+          return $flashBox.text(msg).fadeIn(function() {
+            return timer = setTimeout(function() {
+              return $flashBox.fadeOut();
+            }, 1200);
+          });
+        };
+      })(),
       show: function(showInput) {
         if (showInput == null) {
           showInput = false;

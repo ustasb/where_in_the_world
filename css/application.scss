@@ -170,6 +170,18 @@ input {
     right: 10px;
     font-size: 22px;
   }
+
+  .flash-box {
+    @extend .container;
+    display: none;
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 360px;
+    padding: 5px;
+    text-align: center;
+    border: 2px solid $blue;
+  }
 }
 
 #progress-bar {

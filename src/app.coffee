@@ -82,12 +82,16 @@ class window.App
 
     QuizBox.askQuestion( quiz.getQuestion() )
     QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
-    QuizBox.onInputEnter = (guess) =>
-      regionCode = @map.codeForRegion(quiz.currentRegion)
+    QuizBox.onInputEnter = ($input) =>
+      guess = $input.val()
+      currentRegion = quiz.currentRegion
+      regionCode = @map.codeForRegion(currentRegion)
 
       if quiz.answerQuestion(guess)
+        #QuizBox.flashMessage('correct!')
         @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
       else
+        #QuizBox.flashMessage(quiz.dataForRegion(currentRegion).capital)
         @map.selectRegion(regionCode, INCORRECT_REGION_COLOR)
 
       ProgressBar.update(quiz.percentComplete())

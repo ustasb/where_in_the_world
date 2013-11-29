@@ -1,8 +1,10 @@
 QuizBox = do ->
   ENTER_BUTTON_CODE = 13
   VERT_MARGIN = 10
+
   $el = $('#quiz-box')
   $input = $el.find('.quiz-input')
+  $flashBox = $el.find('.flash-box')
 
   init: ->
     @isTop = true
@@ -16,7 +18,7 @@ QuizBox = do ->
     $el.children('.fa-arrow-down').click -> QuizBox.toggleVertPosition()
     $input.keypress (e) ->
       if e.which is ENTER_BUTTON_CODE
-        QuizBox.onInputEnter($input.val())
+        QuizBox.onInputEnter($input)
         $input.val('')
         e.preventDefault()
 
@@ -44,6 +46,17 @@ QuizBox = do ->
 
   askQuestion: (question) ->
     $el.children('h3').text(question)
+
+  flashMessage: do ->
+    timer = null
+
+    (msg, color = '') ->
+      clearTimeout(timer)
+      $flashBox.text(msg).fadeIn ->
+        timer = setTimeout(
+                  -> $flashBox.fadeOut(),
+                  1200
+                )
 
   show: (showInput = false) ->
     $el.show()

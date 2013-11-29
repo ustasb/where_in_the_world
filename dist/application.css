@@ -24,7 +24,7 @@ input {
 .pure-button-primary {
   font-weight: 100; }
 
-.container, #main-menu, #quiz-box {
+.container, #main-menu, #quiz-box, #quiz-box .flash-box {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
@@ -111,6 +111,15 @@ input {
     top: 6px;
     right: 10px;
     font-size: 22px; }
+  #quiz-box .flash-box {
+    display: none;
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 360px;
+    padding: 5px;
+    text-align: center;
+    border: 2px solid #2980b9; }
 
 #progress-bar {
   position: absolute;
