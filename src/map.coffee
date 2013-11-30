@@ -4,18 +4,6 @@ class Map
   MAX_PLANE_COUNT = 10
   PLANE_SPEED = 1.5
 
-  @loadMap: do ->
-    loaded = {}
-
-    (mapName, callback) ->
-      if loaded[mapName]
-        callback()
-      else
-        $.get "vendor/jvectormap/maps/#{mapName}.js", (loadScript) ->
-          eval( loadScript )
-          loaded[mapName] = true
-          callback()
-
   constructor: (containerID, mapName) ->
     @el = $('#' + containerID)
     @mapName = mapName
@@ -24,12 +12,11 @@ class Map
     $(window).resize(@_updatePlaneSpeed)
 
   render: ->
-    Map.loadMap @mapName, =>
-      @_createMap()
+    @_createMap()
 
-      @_updatePlaneSpeed()
-      @flightControl = new FlightControl(@, MAX_PLANE_COUNT)
-      @flightControl.spawnFlights()
+    @_updatePlaneSpeed()
+    @flightControl = new FlightControl(@, MAX_PLANE_COUNT)
+    @flightControl.spawnFlights()
 
   destroy: ->
     @el.empty()

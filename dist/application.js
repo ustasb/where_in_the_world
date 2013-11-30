@@ -523,22 +523,6 @@
 
     PLANE_SPEED = 1.5;
 
-    Map.loadMap = (function() {
-      var loaded;
-      loaded = {};
-      return function(mapName, callback) {
-        if (loaded[mapName]) {
-          return callback();
-        } else {
-          return $.get("vendor/jvectormap/maps/" + mapName + ".js", function(loadScript) {
-            eval(loadScript);
-            loaded[mapName] = true;
-            return callback();
-          });
-        }
-      };
-    })();
-
     function Map(containerID, mapName) {
       this.el = $('#' + containerID);
       this.mapName = mapName;
@@ -549,13 +533,10 @@
     }
 
     Map.prototype.render = function() {
-      var _this = this;
-      return Map.loadMap(this.mapName, function() {
-        _this._createMap();
-        _this._updatePlaneSpeed();
-        _this.flightControl = new FlightControl(_this, MAX_PLANE_COUNT);
-        return _this.flightControl.spawnFlights();
-      });
+      this._createMap();
+      this._updatePlaneSpeed();
+      this.flightControl = new FlightControl(this, MAX_PLANE_COUNT);
+      return this.flightControl.spawnFlights();
     };
 
     Map.prototype.destroy = function() {
