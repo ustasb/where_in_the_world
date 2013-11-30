@@ -14,14 +14,19 @@ class CapitalQuiz
       @currentRegion = @regions[ randomIndex ]
       "What is the capital of #{@dataForRegion(@currentRegion).prettyName}?"
 
-  answerQuestion: (answer) ->
+  answerQuestion: (guess) ->
     index = $.inArray(@currentRegion, @regions)
     @regions.splice(index, 1)
 
-    correct = @_validateGuess(answer, @dataForRegion(@currentRegion).capital)
-    @numCorrect += 1 if correct
+    levDist = @_validateGuess(guess, @dataForRegion(@currentRegion).capital)
+
     @currentRegion = null
-    correct
+
+    if levDist is false
+      false
+    else
+      @numCorrect += 1
+      levDist
 
   percentComplete: ->
     (1 - @regions.length / @regionsCount) * 100
@@ -60,14 +65,14 @@ class CapitalQuiz
 
     d[m][n]
 
-  # Tolerates misspellings
+  # Returns the Levenshtein distance if the guess is acceptable and false otherwise.
   _validateGuess: (guess, answer) ->
     guess = guess.toLowerCase()
     answer = answer.toLowerCase()
 
-    # You have to get the first letter right!
+    # The first letter has to be correct...
     if guess[0] is answer[0]
-      guess is answer or
-      @_levenshteinDist(guess, answer) <= Math.floor(answer.length / 3)
-    else
-      false
+      levDist = @_levenshteinDist(guess, answer)
+      return levDist if levDist <= Math.floor(answer.length / 3)
+
+    false

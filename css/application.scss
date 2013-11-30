@@ -75,7 +75,7 @@ input {
   min-height: $min-map-size;
   min-width: $min-map-size;
 
-  .highlight {
+  .region-highlight {
     position: absolute;
     opacity: 0.5;
 
@@ -189,7 +189,6 @@ input {
     @extend .container;
     display: none;
     position: absolute;
-    bottom: -40px;
     left: 0;
     width: 360px;
     padding: 5px;

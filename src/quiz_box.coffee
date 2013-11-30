@@ -1,4 +1,5 @@
 QuizBox = do ->
+  FLASH_MESSAGE_TIME = 1600
   ENTER_BUTTON_CODE = 13
   VERT_MARGIN = 10
 
@@ -50,13 +51,23 @@ QuizBox = do ->
   flashMessage: do ->
     timer = null
 
-    (msg, color = '') ->
+    (msg, msgType = 'error') ->
       clearTimeout(timer)
-      $flashBox.text(msg).fadeIn ->
-        timer = setTimeout(
-                  -> $flashBox.fadeOut(),
-                  1200
-                )
+
+      color = switch msgType
+        when 'error' then '#E74C3C' # red
+        when 'warning' then '#F39C12' # orange
+        else '#2C3E50' # dark blue
+
+      if @isTop
+        $flashBox.css(top: '', bottom: '-40px')
+      else
+        $flashBox.css(top: '-40px', bottom: '')
+
+      $flashBox.css('color', color)
+        .text(msg)
+        .fadeIn ->
+          timer = setTimeout (-> $flashBox.fadeOut()), FLASH_MESSAGE_TIME
 
   show: (showInput = false) ->
     $el.show()

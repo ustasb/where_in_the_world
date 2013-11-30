@@ -84,7 +84,7 @@ class Map
 
   highlightRegion: (regionCode) ->
     bBox = @map.regions[regionCode].element.node.getBoundingClientRect()
-    $highlight = $('<div class="highlight"><i class="fa fa-circle-o"></i></div>')
+    $highlight = $('<div class="region-highlight"><i class="fa fa-circle-o"></i></div>')
     centerLeft = bBox.left + (bBox.width / 2)
     centerTop = bBox.top + (bBox.height / 2)
 
@@ -117,8 +117,6 @@ class Map
       backgroundColor: BACKGROUND_COLOR
 
     @map = @el.vectorMap('get', 'mapObject')
-
-    window.m =  @map
 
   # Keeps the plane speed consistent between differently scaled maps.
   _getPlaneSpeed: ->

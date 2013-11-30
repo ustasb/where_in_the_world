@@ -1,6 +1,6 @@
 desc 'Watch and compile CoffeeScript files'
 task :coffee_watch do
-  system 'coffee -cwj dist/application.js src/*'
+  system 'coffee -cwj dist/application.js src/*.coffee'
 end
 
 desc 'Watch and compile SASS files'

@@ -116,16 +116,21 @@
         return QuizBox.askQuestion(quiz.getQuestion());
       };
       QuizBox.onInputEnter = function($input) {
-        var currentRegion, guess, nextQuestion, regionCode, status;
+        var currentRegion, guess, levDist, msgPrefix, nextQuestion, regionCode, status;
         guess = $input.val();
         currentRegion = quiz.currentRegion;
         regionCode = _this.map.codeForRegion(currentRegion);
-        _this.map.highlightRegion(regionCode);
-        if (quiz.answerQuestion(guess)) {
+        if ((levDist = quiz.answerQuestion(guess)) !== false) {
+          if (levDist > 0) {
+            QuizBox.flashMessage("Correct, but the spelling is: " + (quiz.dataForRegion(currentRegion).capital), 'warning');
+          }
           _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
         } else {
+          msgPrefix = guess === '' ? "It's " : "Nope, it's ";
+          QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(currentRegion).capital, 'error');
           _this.map.selectRegion(regionCode, INCORRECT_REGION_COLOR);
         }
+        _this.map.highlightRegion(regionCode);
         ProgressBar.update(quiz.percentComplete());
         if (nextQuestion = quiz.getQuestion()) {
           return QuizBox.askQuestion(nextQuestion);
@@ -172,16 +177,18 @@
       }
     };
 
-    CapitalQuiz.prototype.answerQuestion = function(answer) {
-      var correct, index;
+    CapitalQuiz.prototype.answerQuestion = function(guess) {
+      var index, levDist;
       index = $.inArray(this.currentRegion, this.regions);
       this.regions.splice(index, 1);
-      correct = this._validateGuess(answer, this.dataForRegion(this.currentRegion).capital);
-      if (correct) {
-        this.numCorrect += 1;
-      }
+      levDist = this._validateGuess(guess, this.dataForRegion(this.currentRegion).capital);
       this.currentRegion = null;
-      return correct;
+      if (levDist === false) {
+        return false;
+      } else {
+        this.numCorrect += 1;
+        return levDist;
+      }
     };
 
     CapitalQuiz.prototype.percentComplete = function() {
@@ -231,13 +238,16 @@
     };
 
     CapitalQuiz.prototype._validateGuess = function(guess, answer) {
+      var levDist;
       guess = guess.toLowerCase();
       answer = answer.toLowerCase();
       if (guess[0] === answer[0]) {
-        return guess === answer || this._levenshteinDist(guess, answer) <= Math.floor(answer.length / 3);
-      } else {
-        return false;
+        levDist = this._levenshteinDist(guess, answer);
+        if (levDist <= Math.floor(answer.length / 3)) {
+          return levDist;
+        }
       }
+      return false;
     };
 
     return CapitalQuiz;
@@ -633,7 +643,7 @@
     Map.prototype.highlightRegion = function(regionCode) {
       var $highlight, bBox, centerLeft, centerTop;
       bBox = this.map.regions[regionCode].element.node.getBoundingClientRect();
-      $highlight = $('<div class="highlight"><i class="fa fa-circle-o"></i></div>');
+      $highlight = $('<div class="region-highlight"><i class="fa fa-circle-o"></i></div>');
       centerLeft = bBox.left + (bBox.width / 2);
       centerTop = bBox.top + (bBox.height / 2);
       return $highlight.css({
@@ -669,8 +679,7 @@
         map: this.mapName,
         backgroundColor: BACKGROUND_COLOR
       });
-      this.map = this.el.vectorMap('get', 'mapObject');
-      return window.m = this.map;
+      return this.map = this.el.vectorMap('get', 'mapObject');
     };
 
     Map.prototype._getPlaneSpeed = function() {
@@ -778,7 +787,8 @@
   })();
 
   QuizBox = (function() {
-    var $el, $flashBox, $input, ENTER_BUTTON_CODE, VERT_MARGIN;
+    var $el, $flashBox, $input, ENTER_BUTTON_CODE, FLASH_MESSAGE_TIME, VERT_MARGIN;
+    FLASH_MESSAGE_TIME = 1600;
     ENTER_BUTTON_CODE = 13;
     VERT_MARGIN = 10;
     $el = $('#quiz-box');
@@ -844,15 +854,37 @@
       flashMessage: (function() {
         var timer;
         timer = null;
-        return function(msg, color) {
-          if (color == null) {
-            color = '';
+        return function(msg, msgType) {
+          var color;
+          if (msgType == null) {
+            msgType = 'error';
           }
           clearTimeout(timer);
-          return $flashBox.text(msg).fadeIn(function() {
-            return timer = setTimeout(function() {
+          color = (function() {
+            switch (msgType) {
+              case 'error':
+                return '#E74C3C';
+              case 'warning':
+                return '#F39C12';
+              default:
+                return '#2C3E50';
+            }
+          })();
+          if (this.isTop) {
+            $flashBox.css({
+              top: '',
+              bottom: '-40px'
+            });
+          } else {
+            $flashBox.css({
+              top: '-40px',
+              bottom: ''
+            });
+          }
+          return $flashBox.css('color', color).text(msg).fadeIn(function() {
+            return timer = setTimeout((function() {
               return $flashBox.fadeOut();
-            }, 1200);
+            }), FLASH_MESSAGE_TIME);
           });
         };
       })(),

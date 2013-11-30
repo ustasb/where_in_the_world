@@ -40,10 +40,10 @@ input {
   height: 100%;
   min-height: 100px;
   min-width: 100px; }
-  #map-container .highlight {
+  #map-container .region-highlight {
     position: absolute;
     opacity: 0.5; }
-    #map-container .highlight i.fa {
+    #map-container .region-highlight i.fa {
       display: block;
       pointer-events: none;
       margin-left: 7%;
@@ -123,7 +123,6 @@ input {
   #quiz-box .flash-box {
     display: none;
     position: absolute;
-    bottom: -40px;
     left: 0;
     width: 360px;
     padding: 5px;

@@ -89,14 +89,16 @@ class window.App
       currentRegion = quiz.currentRegion
       regionCode = @map.codeForRegion(currentRegion)
 
-      @map.highlightRegion(regionCode)
-
-      if quiz.answerQuestion(guess)
-        #QuizBox.flashMessage('correct!')
+      if (levDist = quiz.answerQuestion(guess)) isnt false
+        if levDist > 0
+          QuizBox.flashMessage("Correct, but the spelling is: #{quiz.dataForRegion(currentRegion).capital}", 'warning')
         @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
       else
-        #QuizBox.flashMessage(quiz.dataForRegion(currentRegion).capital)
+        msgPrefix = if guess is '' then "It's " else "Nope, it's "
+        QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(currentRegion).capital, 'error')
         @map.selectRegion(regionCode, INCORRECT_REGION_COLOR)
+
+      @map.highlightRegion(regionCode)
 
       ProgressBar.update(quiz.percentComplete())
 
