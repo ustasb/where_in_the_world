@@ -1,5 +1,6 @@
 class Map
   BACKGROUND_COLOR = '#2980B9'
+  HIGHLIGHT_SIZE = 170
   MAX_PLANE_COUNT = 10
   PLANE_SPEED = 1.5
 
@@ -80,6 +81,29 @@ class Map
 
         latLng = @map.pointToLatLng(point.x, point.y)
         return latLng if latLng
+
+  highlightRegion: (regionCode) ->
+    bBox = @map.regions[regionCode].element.node.getBoundingClientRect()
+    $highlight = $('<div class="highlight"><i class="fa fa-circle-o"></i></div>')
+    centerLeft = bBox.left + (bBox.width / 2)
+    centerTop = bBox.top + (bBox.height / 2)
+
+    $highlight.css
+      'font-size': "#{HIGHLIGHT_SIZE}px"
+      left: centerLeft - (HIGHLIGHT_SIZE / 2)
+      top: centerTop - (HIGHLIGHT_SIZE / 2)
+      width: HIGHLIGHT_SIZE
+      height: HIGHLIGHT_SIZE
+    .appendTo(@el)
+    .animate
+      'font-size': 0
+      left: centerLeft
+      top: centerTop
+      width: 0
+      height: 0,
+      opacity: 0
+      700,
+      -> $highlight.remove()
 
   # Returns a random region unless an index is specified.
   _getRegion: (index) ->

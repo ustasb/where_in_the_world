@@ -74,7 +74,21 @@ input {
   height: 100%;
   min-height: $min-map-size;
   min-width: $min-map-size;
+
+  .highlight {
+    position: absolute;
+    opacity: 0.5;
+
+    i.fa {
+      display: block;
+      pointer-events: none;
+      margin-left: 7%;
+      margin-top: 2%;
+      color: $dark-blue;
+    }
+  }
 }
+
 
 // Overriding jVectorMap's class
 .jvectormap-label {

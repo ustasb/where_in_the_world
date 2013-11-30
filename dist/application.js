@@ -85,13 +85,15 @@
           return _this.map.isRegionSelected(code);
         },
         regionClick: function(e, regionCode) {
-          var askedRegion, clickedRegion, nextQuestion, status;
+          var askedRegion, askedRegionCode, clickedRegion, nextQuestion, status;
           clickedRegion = _this.map.regionForCode(regionCode);
           askedRegion = quiz.currentRegion;
           if (quiz.answerQuestion(clickedRegion)) {
             _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
           } else {
-            _this.map.selectRegion(_this.map.codeForRegion(askedRegion), INCORRECT_REGION_COLOR);
+            askedRegionCode = _this.map.codeForRegion(askedRegion);
+            _this.map.highlightRegion(askedRegionCode);
+            _this.map.selectRegion(askedRegionCode, INCORRECT_REGION_COLOR);
           }
           ProgressBar.update(quiz.percentComplete());
           if (nextQuestion = quiz.getQuestion()) {
@@ -118,6 +120,7 @@
         guess = $input.val();
         currentRegion = quiz.currentRegion;
         regionCode = _this.map.codeForRegion(currentRegion);
+        _this.map.highlightRegion(regionCode);
         if (quiz.answerQuestion(guess)) {
           _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
         } else {
@@ -500,9 +503,11 @@
   })();
 
   Map = (function() {
-    var BACKGROUND_COLOR, MAX_PLANE_COUNT, PLANE_SPEED;
+    var BACKGROUND_COLOR, HIGHLIGHT_SIZE, MAX_PLANE_COUNT, PLANE_SPEED;
 
     BACKGROUND_COLOR = '#2980B9';
+
+    HIGHLIGHT_SIZE = 170;
 
     MAX_PLANE_COUNT = 10;
 
@@ -623,6 +628,30 @@
           }
         }
       }
+    };
+
+    Map.prototype.highlightRegion = function(regionCode) {
+      var $highlight, bBox, centerLeft, centerTop;
+      bBox = this.map.regions[regionCode].element.node.getBoundingClientRect();
+      $highlight = $('<div class="highlight"><i class="fa fa-circle-o"></i></div>');
+      centerLeft = bBox.left + (bBox.width / 2);
+      centerTop = bBox.top + (bBox.height / 2);
+      return $highlight.css({
+        'font-size': "" + HIGHLIGHT_SIZE + "px",
+        left: centerLeft - (HIGHLIGHT_SIZE / 2),
+        top: centerTop - (HIGHLIGHT_SIZE / 2),
+        width: HIGHLIGHT_SIZE,
+        height: HIGHLIGHT_SIZE
+      }).appendTo(this.el).animate({
+        'font-size': 0,
+        left: centerLeft,
+        top: centerTop,
+        width: 0,
+        height: 0,
+        opacity: 0
+      }, 700, function() {
+        return $highlight.remove();
+      });
     };
 
     Map.prototype._getRegion = function(index) {

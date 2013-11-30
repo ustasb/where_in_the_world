@@ -66,7 +66,9 @@ class window.App
         if quiz.answerQuestion(clickedRegion)
           @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
         else
-          @map.selectRegion(@map.codeForRegion(askedRegion), INCORRECT_REGION_COLOR)
+          askedRegionCode = @map.codeForRegion(askedRegion)
+          @map.highlightRegion(askedRegionCode)
+          @map.selectRegion(askedRegionCode, INCORRECT_REGION_COLOR)
 
         ProgressBar.update( quiz.percentComplete() )
 
@@ -86,6 +88,8 @@ class window.App
       guess = $input.val()
       currentRegion = quiz.currentRegion
       regionCode = @map.codeForRegion(currentRegion)
+
+      @map.highlightRegion(regionCode)
 
       if quiz.answerQuestion(guess)
         #QuizBox.flashMessage('correct!')
