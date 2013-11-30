@@ -33,6 +33,12 @@ h1 {
   font-weight: 100;
 }
 
+input {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  height: 37px;
+}
+
 @mixin border-box {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -68,7 +74,21 @@ h1 {
   height: 100%;
   min-height: $min-map-size;
   min-width: $min-map-size;
+
+  .region-highlight {
+    position: absolute;
+    opacity: 0.5;
+
+    i.fa {
+      display: block;
+      pointer-events: none;
+      margin-left: 7%;
+      margin-top: 2%;
+      color: $dark-blue;
+    }
+  }
 }
+
 
 // Overriding jVectorMap's class
 .jvectormap-label {
@@ -128,12 +148,26 @@ h1 {
   position: absolute;
   z-index: 3;
   right: 10px;
-  width: 300px;
+  width: 350px;
   padding: 10px;
   border: 2px solid $blue;
 
   h3 {
     margin: 5px 0 15px 0;
+    width: 295px;
+  }
+
+  .skip-question {
+    float: left;
+  }
+
+  form {
+    float: left;
+
+    input {
+      font-size: 18px;
+      margin-left: 10px;
+    }
   }
 
   .fa {
@@ -149,6 +183,17 @@ h1 {
     top: 6px;
     right: 10px;
     font-size: 22px;
+  }
+
+  .flash-box {
+    @extend .container;
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 360px;
+    padding: 5px;
+    text-align: center;
+    border: 2px solid $blue;
   }
 }
 

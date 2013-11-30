@@ -4,6 +4,7 @@ MainMenu = do ->
 
   init: (opts) ->
     @onSelectMap = opts.onSelectMap
+    @onSelectQuiz = opts.onSelectQuiz
     @onStartQuiz = opts.onStartQuiz
 
     @_createMenu()
@@ -18,6 +19,9 @@ MainMenu = do ->
 
   getSelectedMap: ->
     $el.find('#map-type .pure-button-active').first().data('map')
+
+  getSelectedQuiz: ->
+    $el.find('#quiz-type .pure-button-active').first().data('quiz')
 
   showScore: (numCorrect, questionCount, elapsedTime) ->
     $score.show().text(
@@ -47,13 +51,14 @@ MainMenu = do ->
   _bindEvents: ->
     $el.find('#start-quiz').click => @onStartQuiz()
 
-    $el.find('#map-type .pure-button').click do =>
-      $active = $('#map-type .pure-button-active')
+    $el.find('.pure-control-group .pure-button').click (e) ->
+      $target = $(e.target)
+      $current = $target.siblings('.pure-button-active')
 
-      (e) =>
-        $target = $(e.target)
+      unless $target.hasClass('pure-button-active')
+        $current.removeClass('pure-button-active')
+        $current = $target.addClass('pure-button-active')
+        $current.trigger('menu_button_click')
 
-        unless $target.hasClass('pure-button-active')
-          $active.removeClass('pure-button-active')
-          $active = $(e.target).addClass('pure-button-active')
-          @onSelectMap( @getSelectedMap() )
+    $el.find('#map-type').on 'menu_button_click', =>
+      @onSelectMap( @getSelectedMap() )

@@ -1,11 +1,11 @@
 desc 'Watch and compile CoffeeScript files'
 task :coffee_watch do
-  system 'coffee -cwj src/application.js src/*.coffee'
+  system 'coffee -cwj dist/application.js src/*.coffee'
 end
 
 desc 'Watch and compile SASS files'
 task :sass_watch do
-  system 'sass --watch css:css'
+  system 'sass --watch css:dist'
 end
 
 desc 'Start a local server'

@@ -7,7 +7,7 @@
   <link href='//fonts.googleapis.com/css?family=Roboto:100,300' rel='stylesheet' type='text/css'>
   <link type="text/css" rel="stylesheet" href="vendor/pure/pure-min.css" />
   <link type="text/css" rel="stylesheet" href="vendor/jvectormap/jquery-jvectormap-1.2.2.css" />
-  <link type="text/css" rel="stylesheet" href="css/application.css" />
+  <link type="text/css" rel="stylesheet" href="dist/application.css" />
 </head>
 <body>
   <div id="fb-root"></div>
@@ -26,8 +26,12 @@
   <div id="quiz-box">
     <h3><!-- some question --></h3>
     <a class="skip-question pure-button pure-button-primary">Skip</a>
+    <form class="pure-form">
+      <input class="quiz-input" type="text">
+    </form>
     <i class="fa fa-arrow-down"></i>
     <i class="main-menu fa fa-bars" title="Main Menu"></i>
+    <div class="flash-box"></div>
   </div>
 
   <div id="main-menu" class="light-box">
@@ -42,6 +46,11 @@
           <a class="pure-button" data-map="us_mill_en">USA</a>
           <a class="pure-button" data-map="europe_mill_en">Europe</a>
         </div>
+        <div id="quiz-type" class="pure-control-group">
+          <label>Quiz</label>
+          <a class="pure-button pure-button-active" data-quiz="location">Location</a>
+          <a class="pure-button" data-quiz="capital">Capital</a>
+        </div>
         <div class="pure-controls">
           <a id="start-quiz" class="pure-button pure-button-primary">Start</a>
         </div>
@@ -54,7 +63,7 @@
 
   <script src="vendor/jquery/jquery-1.10.2.min.js"></script>
   <script src="vendor/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-  <script src="src/application.js"></script>
+  <script src="dist/application.js"></script>
   <script> new App(); </script>
 
 </body>

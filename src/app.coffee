@@ -19,9 +19,9 @@ class window.App
     QuizBox.hide()
     MainMenu.show()
 
-  _showQuizView: ->
+  _showQuizView: (showInput) ->
     MainMenu.hide()
-    QuizBox.show()
+    QuizBox.show(showInput)
     ProgressBar.show()
 
   _startQuiz: ->
@@ -29,8 +29,13 @@ class window.App
     ProgressBar.reset()
     MainMenu.hideScore()
 
-    @_initLocationQuiz()
-    @_showQuizView()
+    switch MainMenu.getSelectedQuiz()
+      when 'location'
+        @_showQuizView()
+        @_initLocationQuiz()
+      when 'capital'
+        @_showQuizView(true)
+        @_initCapitalQuiz()
 
     @quizStartTime = (new Date).getTime()
 
@@ -61,7 +66,9 @@ class window.App
         if quiz.answerQuestion(clickedRegion)
           @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
         else
-          @map.selectRegion(@map.codeForRegion(askedRegion), INCORRECT_REGION_COLOR)
+          askedRegionCode = @map.codeForRegion(askedRegion)
+          @map.highlightRegion(askedRegionCode)
+          @map.selectRegion(askedRegionCode, INCORRECT_REGION_COLOR)
 
         ProgressBar.update( quiz.percentComplete() )
 
@@ -70,3 +77,39 @@ class window.App
         else
           status = quiz.status()
           @_endQuiz(status.numCorrect, status.questionCount)
+
+  _initCapitalQuiz: ->
+    mapName = MainMenu.getSelectedMap()
+    quiz = new CapitalQuiz(@map.getRegions(), mapName is 'us_mill_en')
+
+    QuizBox.askQuestion( quiz.getQuestion() )
+    QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
+    QuizBox.onInputEnter = ($input) =>
+      guess = $input.val()
+      currentRegion = quiz.currentRegion
+      regionCode = @map.codeForRegion(currentRegion)
+
+      if (levDist = quiz.answerQuestion(guess)) isnt false
+        if levDist > 0
+          QuizBox.flashMessage("Correct, but the spelling is: #{quiz.dataForRegion(currentRegion).capital}", 'warning')
+        @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
+      else
+        msgPrefix = if guess is '' then "It's " else "Nope, it's "
+        QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(currentRegion).capital, 'error')
+        @map.selectRegion(regionCode, INCORRECT_REGION_COLOR)
+
+      @map.highlightRegion(regionCode)
+
+      ProgressBar.update(quiz.percentComplete())
+
+      if nextQuestion = quiz.getQuestion()
+        QuizBox.askQuestion(nextQuestion)
+      else
+        status = quiz.status()
+        @_endQuiz(status.numCorrect, status.questionCount)
+
+    @map.bindEvents
+      regionLabelShow: (e, label, code) =>
+        if @map.isRegionSelected(code)
+          region = label.text()
+          label.text("#{region} | #{quiz.dataForRegion(region).capital}")
