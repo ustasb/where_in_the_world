@@ -1017,7 +1017,7 @@
         prettyName: "Bouvet Island"
       },
       brazil: {
-        capital: "Brasília",
+        capital: "Brasilia",
         prettyName: "Brazil"
       },
       "british indian ocean territory": {
@@ -1049,7 +1049,7 @@
         prettyName: "Cambodia"
       },
       cameroon: {
-        capital: "Yaoundé",
+        capital: "Yaounde",
         prettyName: "Cameroon"
       },
       canada: {
@@ -1089,7 +1089,7 @@
         prettyName: "Cocos (Keeling) Islands"
       },
       colombia: {
-        capital: "Bogotá",
+        capital: "Bogota",
         prettyName: "Colombia"
       },
       comoros: {
@@ -1109,7 +1109,7 @@
         prettyName: "Cook Islands"
       },
       "costa rica": {
-        capital: "San José",
+        capital: "San Jose",
         prettyName: "Costa Rica"
       },
       "côte d'ivoire": {
@@ -1193,7 +1193,7 @@
         prettyName: "Falkland Islands"
       },
       "faroe islands": {
-        capital: "Tórshavn",
+        capital: "Torshavn",
         prettyName: "Faroe Islands"
       },
       fiji: {
@@ -1213,11 +1213,11 @@
         prettyName: "French Guiana"
       },
       "french polynesia": {
-        capital: "Papeetē",
+        capital: "Papeete",
         prettyName: "French Polynesia"
       },
       "french southern and antarctic lands": {
-        capital: "Port-aux-Français",
+        capital: "Port-aux-Francais",
         prettyName: "French Southern and Antarctic Lands"
       },
       gabon: {
@@ -1261,7 +1261,7 @@
         prettyName: "Guadeloupe"
       },
       guam: {
-        capital: "Hagåtña",
+        capital: "Hagatna",
         prettyName: "Guam"
       },
       guatemala: {
@@ -1445,7 +1445,7 @@
         prettyName: "Malaysia"
       },
       maldives: {
-        capital: "Malé",
+        capital: "Male",
         prettyName: "Maldives"
       },
       mali: {
@@ -1485,7 +1485,7 @@
         prettyName: "Micronesia"
       },
       moldova: {
-        capital: "Chișinău",
+        capital: "Chisinau",
         prettyName: "Moldova"
       },
       monaco: {
@@ -1533,7 +1533,7 @@
         prettyName: "Netherlands"
       },
       "new caledonia": {
-        capital: "Nouméa",
+        capital: "Noumea",
         prettyName: "New Caledonia"
       },
       "new zealand": {
@@ -1597,7 +1597,7 @@
         prettyName: "Papua New Guinea"
       },
       paraguay: {
-        capital: "Asunción",
+        capital: "Asuncion",
         prettyName: "Paraguay"
       },
       peru: {
@@ -1681,7 +1681,7 @@
         prettyName: "San Marino"
       },
       "são tomé and príncipe": {
-        capital: "São Tomé",
+        capital: "Sao Tome",
         prettyName: "São Tomé and Príncipe"
       },
       "saudi arabia": {
@@ -1813,7 +1813,7 @@
         prettyName: "East Timor"
       },
       togo: {
-        capital: "Lomé",
+        capital: "Lome",
         prettyName: "Togo"
       },
       tokelau: {
@@ -1905,7 +1905,7 @@
         prettyName: "Wallis and Futuna"
       },
       "western sahara": {
-        capital: "El Aaiún",
+        capital: "El Aaiun",
         prettyName: "Western Sahara"
       },
       "west bank": {

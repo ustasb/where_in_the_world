@@ -133,7 +133,7 @@ REGION_DATA =
       prettyName: "Bouvet Island"
 
     brazil:
-      capital: "Brasília"
+      capital: "Brasilia"
       prettyName: "Brazil"
 
     "british indian ocean territory":
@@ -165,7 +165,7 @@ REGION_DATA =
       prettyName: "Cambodia"
 
     cameroon:
-      capital: "Yaoundé"
+      capital: "Yaounde"
       prettyName: "Cameroon"
 
     canada:
@@ -205,7 +205,7 @@ REGION_DATA =
       prettyName: "Cocos (Keeling) Islands"
 
     colombia:
-      capital: "Bogotá"
+      capital: "Bogota"
       prettyName: "Colombia"
 
     comoros:
@@ -225,7 +225,7 @@ REGION_DATA =
       prettyName: "Cook Islands"
 
     "costa rica":
-      capital: "San José"
+      capital: "San Jose"
       prettyName: "Costa Rica"
 
     "côte d'ivoire":
@@ -309,7 +309,7 @@ REGION_DATA =
       prettyName: "Falkland Islands"
 
     "faroe islands":
-      capital: "Tórshavn"
+      capital: "Torshavn"
       prettyName: "Faroe Islands"
 
     fiji:
@@ -329,11 +329,11 @@ REGION_DATA =
       prettyName: "French Guiana"
 
     "french polynesia":
-      capital: "Papeetē"
+      capital: "Papeete"
       prettyName: "French Polynesia"
 
     "french southern and antarctic lands":
-      capital: "Port-aux-Français"
+      capital: "Port-aux-Francais"
       prettyName: "French Southern and Antarctic Lands"
 
     gabon:
@@ -377,7 +377,7 @@ REGION_DATA =
       prettyName: "Guadeloupe"
 
     guam:
-      capital: "Hagåtña"
+      capital: "Hagatna"
       prettyName: "Guam"
 
     guatemala:
@@ -561,7 +561,7 @@ REGION_DATA =
       prettyName: "Malaysia"
 
     maldives:
-      capital: "Malé"
+      capital: "Male"
       prettyName: "Maldives"
 
     mali:
@@ -601,7 +601,7 @@ REGION_DATA =
       prettyName: "Micronesia"
 
     moldova:
-      capital: "Chișinău"
+      capital: "Chisinau"
       prettyName: "Moldova"
 
     monaco:
@@ -649,7 +649,7 @@ REGION_DATA =
       prettyName: "Netherlands"
 
     "new caledonia":
-      capital: "Nouméa"
+      capital: "Noumea"
       prettyName: "New Caledonia"
 
     "new zealand":
@@ -713,7 +713,7 @@ REGION_DATA =
       prettyName: "Papua New Guinea"
 
     paraguay:
-      capital: "Asunción"
+      capital: "Asuncion"
       prettyName: "Paraguay"
 
     peru:
@@ -797,7 +797,7 @@ REGION_DATA =
       prettyName: "San Marino"
 
     "são tomé and príncipe":
-      capital: "São Tomé"
+      capital: "Sao Tome"
       prettyName: "São Tomé and Príncipe"
 
     "saudi arabia":
@@ -929,7 +929,7 @@ REGION_DATA =
       prettyName: "East Timor"
 
     togo:
-      capital: "Lomé"
+      capital: "Lome"
       prettyName: "Togo"
 
     tokelau:
@@ -1021,7 +1021,7 @@ REGION_DATA =
       prettyName: "Wallis and Futuna"
 
     "western sahara":
-      capital: "El Aaiún"
+      capital: "El Aaiun"
       prettyName: "Western Sahara"
 
     "west bank":
