@@ -849,8 +849,8 @@ REGION_DATA =
       prettyName: "Somalia"
 
     "somaliland":
-      capital: "Mogadishu"
-      prettyName: "Somalia"
+      capital: "Hargeisa"
+      prettyName: "Somaliland"
 
     "south africa":
       capital: "Cape Town"
