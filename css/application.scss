@@ -58,6 +58,15 @@ input {
   box-shadow: $radius $radius $spread $color;
 }
 
+@mixin disable-selection {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .pure-button-primary {
   font-weight: 100;
 }
@@ -224,6 +233,7 @@ input {
 }
 
 .plane {
+  @include disable-selection;
   position: absolute;
   pointer-events: none;
   margin-top: -($plane-size / 2);  // Move the pivot point to the center.
