@@ -8,7 +8,7 @@ task :sass_watch do
   system 'sass --watch css:dist'
 end
 
-desc 'Start a local server'
+desc 'Start a local server on port 8000'
 task :server do
   system 'ruby -r un -e httpd . -p 8000'
 end
