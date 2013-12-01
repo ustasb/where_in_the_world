@@ -22,7 +22,7 @@ body {
   font-size: 16px;
 }
 
-body, div, span, h1, h2, h3, h4, h5, h6 {
+body, div, span, input, h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   color: $dark-blue;
@@ -34,8 +34,6 @@ h1 {
 }
 
 input {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
   height: 37px;
 }
 
@@ -79,10 +77,10 @@ input {
 #map-container {
   @include border-box;
   padding: $map-padding;
+  min-width: $min-map-size;
+  min-height: $min-map-size;
   width: 100%;
   height: 100%;
-  min-height: $min-map-size;
-  min-width: $min-map-size;
 
   .region-highlight {
     position: absolute;
@@ -233,11 +231,13 @@ input {
 }
 
 .plane {
+  $center-offset: -$plane-size / 2;
+
   @include disable-selection;
-  position: absolute;
   pointer-events: none;
-  margin-top: -($plane-size / 2);  // Move the pivot point to the center.
-  margin-left: -($plane-size / 2);
+  position: absolute;
+  margin-top: $center-offset;
+  margin-left: $center-offset;
   width: $plane-size;
   height: $plane-size;
 }
