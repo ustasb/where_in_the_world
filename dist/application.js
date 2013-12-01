@@ -769,7 +769,7 @@
 
   QuizBox = (function() {
     var $el, $flashBox, $input, ENTER_BUTTON_CODE, FLASH_MESSAGE_TIME, VERT_MARGIN;
-    FLASH_MESSAGE_TIME = 1600;
+    FLASH_MESSAGE_TIME = 1700;
     ENTER_BUTTON_CODE = 13;
     VERT_MARGIN = 10;
     $el = $('#quiz-box');
