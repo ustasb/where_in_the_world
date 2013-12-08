@@ -12,7 +12,7 @@ class window.App
       onStartQuiz: => @_startQuiz()
 
     @_showMainMenuView()
-    @_renderMap( MainMenu.getSelectedMap() )
+    @_renderMap(MainMenu.getSelectedMap())
 
   _showMainMenuView: ->
     ProgressBar.hide()
@@ -51,9 +51,9 @@ class window.App
     @map.render()
 
   _initLocationQuiz: ->
-    quiz = new LocationQuiz( @map.getRegions() )
-    QuizBox.askQuestion( quiz.getQuestion() )
-    QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
+    quiz = new LocationQuiz(@map.getRegions())
+    QuizBox.askQuestion(quiz.getQuestion())
+    QuizBox.onSkipQuestion = -> QuizBox.askQuestion(quiz.getQuestion())
 
     @map.bindEvents
       regionLabelShow: (e, label, code) =>
@@ -70,7 +70,7 @@ class window.App
           @map.highlightRegion(askedRegionCode)
           @map.selectRegion(askedRegionCode, INCORRECT_REGION_COLOR)
 
-        ProgressBar.update( quiz.percentComplete() )
+        ProgressBar.update(quiz.percentComplete())
 
         if nextQuestion = quiz.getQuestion()
           QuizBox.askQuestion(nextQuestion)
@@ -82,23 +82,23 @@ class window.App
     mapName = MainMenu.getSelectedMap()
     quiz = new CapitalQuiz(@map.getRegions(), mapName is 'us_mill_en')
 
-    QuizBox.askQuestion( quiz.getQuestion() )
-    QuizBox.onSkipQuestion = -> QuizBox.askQuestion( quiz.getQuestion() )
+    QuizBox.askQuestion(quiz.getQuestion())
+    QuizBox.onSkipQuestion = -> QuizBox.askQuestion(quiz.getQuestion())
     QuizBox.onInputEnter = ($input) =>
       guess = $input.val()
-      currentRegion = quiz.currentRegion
-      regionCode = @map.codeForRegion(currentRegion)
+      askedRegion = quiz.currentRegion
+      askedRegionCode = @map.codeForRegion(askedRegion)
 
       if (levDist = quiz.answerQuestion(guess)) isnt false
         if levDist > 0
-          QuizBox.flashMessage("Correct, but the spelling is: #{quiz.dataForRegion(currentRegion).capital}", 'warning')
-        @map.selectRegion(regionCode, CORRECT_REGION_COLOR)
+          QuizBox.flashMessage("Correct, but the spelling is: #{quiz.dataForRegion(askedRegion).capital}", 'warning')
+        @map.selectRegion(askedRegionCode, CORRECT_REGION_COLOR)
       else
         msgPrefix = if guess is '' then "It's " else "Nope, it's "
-        QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(currentRegion).capital, 'error')
-        @map.selectRegion(regionCode, INCORRECT_REGION_COLOR)
+        QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(askedRegion).capital, 'error')
+        @map.selectRegion(askedRegionCode, INCORRECT_REGION_COLOR)
 
-      @map.highlightRegion(regionCode)
+      @map.highlightRegion(askedRegionCode)
 
       ProgressBar.update(quiz.percentComplete())
 

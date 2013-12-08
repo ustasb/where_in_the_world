@@ -11,10 +11,8 @@ class FlightControl
     @halted = false
 
   destroyAll: ->
-    plane.destroy() for plane in @planes by 1
-
-  haltFlights: ->
     @halted = true
+    plane.destroy() for plane in @planes by 1
 
   spawnFlights: ->
     @halted = false
@@ -43,7 +41,7 @@ class FlightControl
   _spawnPlanes: ->
     until @planes.length >= @maxPlaneCount
       flight = @_createFlight()
-      @planes.push( new Plane(@map, flight.start, flight.end, @planeSpeed) )
+      @planes.push(new Plane(@map, flight.start, flight.end, @planeSpeed))
 
   _animatePlanes: ->
     i = @planes.length

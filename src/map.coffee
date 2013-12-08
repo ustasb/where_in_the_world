@@ -1,6 +1,7 @@
 class Map
   BACKGROUND_COLOR = '#2980B9'
   HIGHLIGHT_SIZE = 170
+  HIGHLIGHT_ANI_SPEED = 700
   MAX_PLANE_COUNT = 10
   PLANE_SPEED = 1.5
 
@@ -20,7 +21,6 @@ class Map
 
   destroy: ->
     @el.empty()
-    @flightControl.haltFlights()
     @flightControl.destroyAll()
     $(window).unbind('resize', @_updatePlaneSpeed)
 
@@ -37,7 +37,7 @@ class Map
 
   codeForRegion: (regionName) ->
     for regionCode, data of @map.regions
-      return regionCode if data.config.name == regionName
+      return regionCode if data.config.name is regionName
 
   regionForCode: (regionCode) ->
     @map.getRegionName(regionCode)
@@ -89,14 +89,14 @@ class Map
       width: 0
       height: 0,
       opacity: 0
-      700,
+      HIGHLIGHT_ANI_SPEED,
       -> $highlight.remove()
 
   # Returns a random region unless an index is specified.
   _getRegion: (index) ->
     @regionKeys ?= Object.keys(@map.regions)
     index ?= Math.floor(Math.random() * @regionKeys.length)
-    @map.regions[ @regionKeys[index] ]
+    @map.regions[@regionKeys[index]]
 
   _createMap: ->
     @el.vectorMap

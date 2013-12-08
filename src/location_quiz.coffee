@@ -10,7 +10,7 @@ class LocationQuiz
       null
     else
       randomIndex = Math.floor (Math.random() * @regions.length)
-      @currentRegion = @regions[ randomIndex ]
+      @currentRegion = @regions[randomIndex]
       "Where is #{@currentRegion}?"
 
   answerQuestion: (answer) ->
@@ -29,4 +29,3 @@ class LocationQuiz
     questionsLeft: @regions.length
     questionCount: @regionsCount
     numCorrect: @numCorrect
-

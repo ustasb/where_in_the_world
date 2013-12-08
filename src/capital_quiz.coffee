@@ -11,7 +11,7 @@ class CapitalQuiz
       null
     else
       randomIndex = Math.floor (Math.random() * @regions.length)
-      @currentRegion = @regions[ randomIndex ]
+      @currentRegion = @regions[randomIndex]
       "What is the capital of #{@dataForRegion(@currentRegion).prettyName}?"
 
   answerQuestion: (guess) ->

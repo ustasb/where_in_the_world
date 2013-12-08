@@ -32,5 +32,5 @@ class LightBox
 
     @el.css
       left: ($window.width() - @el.width()) / 2
-      top: (($window.height() - @el.height()) / 2) - verticalOffset
+      top: ($window.height() - @el.height()) / 2 - verticalOffset
 

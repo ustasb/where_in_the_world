@@ -46,7 +46,7 @@ MainMenu = do ->
       "#{minutesString} and #{secondsString}"
 
   _createMenu: ->
-    @lightbox = new LightBox('main-menu')
+    @lightbox ?= new LightBox('main-menu')
 
   _bindEvents: ->
     $el.find('#start-quiz').click => @onStartQuiz()
@@ -61,4 +61,4 @@ MainMenu = do ->
         $current.trigger('menu_button_click')
 
     $el.find('#map-type').on 'menu_button_click', =>
-      @onSelectMap( @getSelectedMap() )
+      @onSelectMap(@getSelectedMap())

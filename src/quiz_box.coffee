@@ -17,6 +17,7 @@ QuizBox = do ->
     $el.children('.skip-question').click -> QuizBox.onSkipQuestion()
     $el.children('.main-menu').click -> QuizBox.onMenuClick()
     $el.children('.fa-arrow-down').click -> QuizBox.toggleVertPosition()
+
     $input.keypress (e) ->
       if e.which is ENTER_BUTTON_CODE
         QuizBox.onInputEnter($input)

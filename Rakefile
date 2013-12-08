@@ -3,7 +3,7 @@ task :coffee_watch do
   system 'coffee -cwj dist/application.js src/*.coffee'
 end
 
-desc 'Watch and compile SASS files'
+desc 'Watch and compile Sass files'
 task :sass_watch do
   system 'sass --watch css:dist'
 end

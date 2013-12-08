@@ -38,7 +38,6 @@ class Plane
     size = if size > PLANE_SIZE then PLANE_SIZE else size
 
     # Make the plane curve into its destination.
-
     curveHeight = @amplitude * 3
     curvedLng = @pos.lng - curveHeight * Math.sin(@ang)
     curvedLat = @pos.lat + curveHeight * Math.cos(@ang)
@@ -62,4 +61,6 @@ class Plane
         '-ms-transform': rotateVal # IE
         '-o-transform': rotateVal # Opera
     else
+      # The plane's flying off screen to Alaska, for instance.
+      # If not hidden, it'll just sit at the edge of the screen.
       @el.hide()

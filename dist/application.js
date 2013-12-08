@@ -116,21 +116,21 @@
         return QuizBox.askQuestion(quiz.getQuestion());
       };
       QuizBox.onInputEnter = function($input) {
-        var currentRegion, guess, levDist, msgPrefix, nextQuestion, regionCode, status;
+        var askedRegion, askedRegionCode, guess, levDist, msgPrefix, nextQuestion, status;
         guess = $input.val();
-        currentRegion = quiz.currentRegion;
-        regionCode = _this.map.codeForRegion(currentRegion);
+        askedRegion = quiz.currentRegion;
+        askedRegionCode = _this.map.codeForRegion(askedRegion);
         if ((levDist = quiz.answerQuestion(guess)) !== false) {
           if (levDist > 0) {
-            QuizBox.flashMessage("Correct, but the spelling is: " + (quiz.dataForRegion(currentRegion).capital), 'warning');
+            QuizBox.flashMessage("Correct, but the spelling is: " + (quiz.dataForRegion(askedRegion).capital), 'warning');
           }
-          _this.map.selectRegion(regionCode, CORRECT_REGION_COLOR);
+          _this.map.selectRegion(askedRegionCode, CORRECT_REGION_COLOR);
         } else {
           msgPrefix = guess === '' ? "It's " : "Nope, it's ";
-          QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(currentRegion).capital, 'error');
-          _this.map.selectRegion(regionCode, INCORRECT_REGION_COLOR);
+          QuizBox.flashMessage(msgPrefix + quiz.dataForRegion(askedRegion).capital, 'error');
+          _this.map.selectRegion(askedRegionCode, INCORRECT_REGION_COLOR);
         }
-        _this.map.highlightRegion(regionCode);
+        _this.map.highlightRegion(askedRegionCode);
         ProgressBar.update(quiz.percentComplete());
         if (nextQuestion = quiz.getQuestion()) {
           return QuizBox.askQuestion(nextQuestion);
@@ -271,6 +271,7 @@
 
     FlightControl.prototype.destroyAll = function() {
       var plane, _i, _len, _ref, _results;
+      this.halted = true;
       _ref = this.planes;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i += 1) {
@@ -278,10 +279,6 @@
         _results.push(plane.destroy());
       }
       return _results;
-    };
-
-    FlightControl.prototype.haltFlights = function() {
-      return this.halted = true;
     };
 
     FlightControl.prototype.spawnFlights = function() {
@@ -388,7 +385,7 @@
       verticalOffset = 50;
       return this.el.css({
         left: ($window.width() - this.el.width()) / 2,
-        top: (($window.height() - this.el.height()) / 2) - verticalOffset
+        top: ($window.height() - this.el.height()) / 2 - verticalOffset
       });
     };
 
@@ -488,7 +485,7 @@
         }
       },
       _createMenu: function() {
-        return this.lightbox = new LightBox('main-menu');
+        return this.lightbox != null ? this.lightbox : this.lightbox = new LightBox('main-menu');
       },
       _bindEvents: function() {
         var _this = this;
@@ -513,11 +510,13 @@
   })();
 
   Map = (function() {
-    var BACKGROUND_COLOR, HIGHLIGHT_SIZE, MAX_PLANE_COUNT, PLANE_SPEED;
+    var BACKGROUND_COLOR, HIGHLIGHT_ANI_SPEED, HIGHLIGHT_SIZE, MAX_PLANE_COUNT, PLANE_SPEED;
 
     BACKGROUND_COLOR = '#2980B9';
 
     HIGHLIGHT_SIZE = 170;
+
+    HIGHLIGHT_ANI_SPEED = 700;
 
     MAX_PLANE_COUNT = 10;
 
@@ -541,7 +540,6 @@
 
     Map.prototype.destroy = function() {
       this.el.empty();
-      this.flightControl.haltFlights();
       this.flightControl.destroyAll();
       return $(window).unbind('resize', this._updatePlaneSpeed);
     };
@@ -640,7 +638,7 @@
         width: 0,
         height: 0,
         opacity: 0
-      }, 700, function() {
+      }, HIGHLIGHT_ANI_SPEED, function() {
         return $highlight.remove();
       });
     };
