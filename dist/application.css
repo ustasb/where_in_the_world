@@ -71,10 +71,6 @@ input {
   width: 550px;
   padding: 10px 20px 20px 20px;
   overflow: hidden; }
-  #main-menu .fb-like {
-    position: absolute;
-    top: 20px;
-    right: 20px; }
   #main-menu #score {
     margin-left: 15px;
     margin-bottom: 30px; }
