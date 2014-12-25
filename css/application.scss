@@ -208,6 +208,14 @@ input {
   background-color: $orange;
 }
 
+#facebook-like-button {
+  position: absolute;
+  top: 15px;
+  right: -7px;
+  width: 100px;
+  overflow: hidden;
+}
+
 .light-box {
   position: absolute;
   z-index: 3;
@@ -235,4 +243,3 @@ input {
   width: $plane-size;
   height: $plane-size;
 }
-
