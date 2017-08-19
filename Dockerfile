@@ -1,12 +1,20 @@
-FROM ubuntu:14.04
+FROM ruby:2.4.1-alpine3.6
 MAINTAINER Brian Ustas <brianustas@gmail.com>
 
-RUN apt-get -y update && \
-    apt-get -y install git
+ARG APP_PATH="/srv/www/where_in_the_world"
 
-RUN git clone https://github.com/ustasb/where_in_the_world.git /srv/www/where_in_the_world && \
-    rm -rf /srv/www/where_in_the_world/.git
+RUN apk add --update \
+  nodejs \
+  nodejs-npm \
+  build-base \
+  && rm -rf /var/cache/apk/*
 
-WORKDIR /srv/www/where_in_the_world
+# CoffeeScript
+RUN npm install -g coffeescript@1.6.3
 
-VOLUME /srv/www/where_in_the_world
+# Sass
+RUN gem install sass -v 3.5.1 --no-user-install
+
+WORKDIR $APP_PATH
+COPY . $APP_PATH
+VOLUME $APP_PATH

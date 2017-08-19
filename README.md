@@ -1,16 +1,27 @@
 # Where in the World
 
-[ustasb.com/whereintheworld][1]
+[ustasb.com/whereintheworld](http://ustasb.com/whereintheworld)
 
 A quiz to aid the learning of world country locations and capitals.
 
+## Usage
+
+First, build the Docker image:
+
+    docker build -t where_in_the_world .
+
+Compile SASS and CoffeeScript with:
+
+    ./recompile_assets.sh
+
 ## Development
 
-Run `rake -T` for task descriptions.
+To recompile assets when files change:
 
-This project relies on [Ruby][2], [Sass][3] and [CoffeeScript][4].
+    fswatch -o src css | xargs -n1 -I{} ./recompile_assets.sh
 
-[1]: http://ustasb.com/whereintheworld
-[2]: https://www.ruby-lang.org/
-[3]: http://sass-lang.com/
-[4]: http://coffeescript.org/
+To serve assets via a local server:
+
+    python -m SimpleHTTPServer
+
+Navigate to `http://localhost:8000` in your browser.
