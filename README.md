@@ -1,27 +1,35 @@
 # Where in the World
 
-[ustasb.com/whereintheworld](http://ustasb.com/whereintheworld)
+[ustasb.com/where-in-the-world](http://ustasb.com/where-in-the-world)
 
 A quiz to aid the learning of world country locations and capitals.
 
+Initial release: 01/04/14
+
 ## Usage
 
-First, build the Docker image:
+First build the Docker image:
 
     docker build -t where_in_the_world .
 
 Compile SASS and CoffeeScript with:
 
-    ./recompile_assets.sh
+    rake docker_build_dist
 
-## Development
+    # To recompile assets when files change (uses fswatch):
 
-To recompile assets when files change:
+    rake docker_build_dist_and_watch
 
-    fswatch -o src css | xargs -n1 -I{} ./recompile_assets.sh
+Serve assets via a local server:
 
-To serve assets via a local server:
-
-    python -m SimpleHTTPServer
+    cd src && python -m SimpleHTTPServer
 
 Navigate to `http://localhost:8000` in your browser.
+
+## Production
+
+To build the `public/` folder:
+
+    rake docker_build_public
+
+Open `public/index.html`.
