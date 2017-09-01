@@ -17,7 +17,6 @@ RUN gem install sass -v 3.5.1 --no-user-install
 
 WORKDIR $APP_PATH
 COPY . $APP_PATH
-
-RUN rake build_public
-
 VOLUME $APP_PATH
+
+CMD ["rake", "build_public"]
