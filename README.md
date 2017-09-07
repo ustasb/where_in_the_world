@@ -1,6 +1,6 @@
 # Where in the World
 
-[ustasb.com/where-in-the-world](http://ustasb.com/where-in-the-world)
+[brianustas.com/where-in-the-world](http://brianustas.com/where-in-the-world)
 
 A quiz to aid the learning of world country locations and capitals.
 
