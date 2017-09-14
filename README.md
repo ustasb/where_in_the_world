@@ -4,7 +4,7 @@
 - Initial release: 01/04/14
 - Author: [Brian Ustas](http://brianustas.com)
 
-A quiz to aid the learning of world country locations and capitals.
+An interactive quiz to aid the learning of world country locations and capitals.
 
 ## Usage
 
