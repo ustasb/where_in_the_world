@@ -1,6 +1,6 @@
 # Where in the World
 
-- [brianustas.com/where-in-the-world](http://brianustas.com/where-in-the-world/)
+- [brianustas.com/where-in-the-world/](http://brianustas.com/where-in-the-world/)
 - Initial release: 01/04/14
 - Author: [Brian Ustas](http://brianustas.com)
 
